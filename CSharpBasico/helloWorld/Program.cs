@@ -6,8 +6,15 @@ namespace HelloWorld
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
-            Console.ReadLine();
+            int variavelTeste;
+
+            variavelTeste = 123;
+            var v1 = 5;
+            var v2 = 25;
+             var total = v1 + v2;
+
+            Console.WriteLine("valor é: "+ total);
+            // Console.ReadLine();
         }
     }
 }

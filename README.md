@@ -3,10 +3,10 @@ Desenvolvendo uma API com ajuda de um curso da Udemy
 
 ## Extension install
 
--- C#
--- C# Extensions
--- C# XML Documentation Comments
--- vscode-icons
+- [x] C#
+- [x] C# Extensions
+- [x] C# XML Documentation Comments
+- [x] vscode-icons
 
 
 

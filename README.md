@@ -1,6 +1,15 @@
 # Udemy-ASPNet-Core
 Desenvolvendo uma API com ajuda de um curso da Udemy
 
+## Extension install
+
+-- C#
+-- C# Extensions
+-- C# XML Documentation Comments
+-- vscode-icons
+
+
+
 # Lista de opções de projetos
 
 `dotnet new`

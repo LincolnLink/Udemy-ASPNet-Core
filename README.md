@@ -112,7 +112,7 @@ RESTFULL endereça nomes de recursos junto a métodos HTTP para realizar operaç
 
 
 
-# Criando uma aplicação em WebApi
+# Criando uma aplicação em WebApi (Aplication)
 
 `dotnet new webapi -n Application -o Api.Application --no-https`
 
@@ -120,7 +120,7 @@ RESTFULL endereça nomes de recursos junto a métodos HTTP para realizar operaç
 - -o : nome da pasta
 - --no-https: configuração temporaria.
 
-# Vinculando aplicação com solução!
+# Vinculando aplicação com solução! 
 
 `dotnet sln add Api.Application`
 
@@ -129,3 +129,35 @@ RESTFULL endereça nomes de recursos junto a métodos HTTP para realizar operaç
 - 3° depois disso deve abrir o codigo `code .` , vai aparecer uma mensagem, pedindo para debugar, clica em YES! 
 
 Com essa configuração é possivel debugar a aplicação!! (#42)
+
+# Criando o Dominio, bibliotecas de classe (Domain)
+
+`dotnet new classlib -n Domain -f netcoreapp2.2 -o Api.Domain`
+
+- -n: nome da biblioteca de classe.
+- -f tipo da biblioteca de classe.
+- -o cria uma pasta para a biblioteca de classe
+
+# Adicionando a lib na solução
+
+`dotnet sln add Api.Domain`
+
+- "Api.Domain" nome da pasta da lib !
+
+# Criando a lib Api.CrossCutting e Api.Data (Infra Estrutura)
+
+`dotnet new classlib -n CrossCutting -f netcoreapp2.2 -o ApiCrossCutting`
+
+`dotnet new classlib -n Data -f netcoreapp2.2 -o Api.Data  `
+
+- -n CrossCutting: nome da classlib
+- -f netcoreapp2.2: o tipo da classlib
+- -o ApiCrossCutting: criando a pasta da lib
+
+# Adicionando a lib na solução
+
+`dotnet sln add Api.CrossCutting`
+`dotnet sln add Api.Data`
+
+depois pode buildar usando `dotnet build`
+

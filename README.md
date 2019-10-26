@@ -161,3 +161,24 @@ Com essa configuração é possivel debugar a aplicação!! (#42)
 
 depois pode buildar usando `dotnet build`
 
+
+# Instalando o EntityFrameWork (Microsoft.EntityFrameworkCore.Tools)
+
+Site: https://www.nuget.org/
+
+- NET CLI do pacote Entity
+
+`dotnet add package Microsoft.EntityFrameworkCore.Tools --version 2.2.6`
+
+`dotnet add package Microsoft.EntityFrameworkCore.Design --version 2.2.6`
+
+`dotnet add package Pomelo.EntityFrameworkCore.MySql --version 2.2.6`
+
+
+#Configurando o EntityFrameWork
+
+Criando MyContext e referenciar Api.Data com Api.Domain
+
+- Comando que adiciona referencia
+
+`dotnet add .\Api.Data\ reference .\Api.Domain\`

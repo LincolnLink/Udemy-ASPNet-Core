@@ -175,10 +175,29 @@ Site: https://www.nuget.org/
 `dotnet add package Pomelo.EntityFrameworkCore.MySql --version 2.2.6`
 
 
-#Configurando o EntityFrameWork
+# Configurando o EntityFrameWork
 
 Criando MyContext e referenciar Api.Data com Api.Domain
 
 - Comando que adiciona referencia
 
 `dotnet add .\Api.Data\ reference .\Api.Domain\`
+
+<blockquote> Iniciando o Contexto </blockquote>
+
+1° Foi criada uma pasta para o cextet e uma classe(MyContext), nela foi exdada uma classe chamada 'DbContext', iniciado uma propriedade(prop) chamada 'User' do tipo generico DbSet<T>, aonde T recebe a entidade que deve ser mapeada!
+
+`public DbSet<UserEntity> Users { get; set; }`
+
+2° no método construtor, é passado pelo parametro chamado options do tipo generico DbContextOptions<T>, aonde T é a propria classe de contexto! 
+
+`public MyContext(DbContextOptions<MyContext> options) : base(options){}`
+
+3° Foi feito um override da classe OnModelCreating(), aonde recebe o ModelBuilder como parametro!
+
+`protected override void OnModelCreating(ModelBuilder modelBuilder)
+ {
+ 	base.OnModelCreating(modelBuilder);
+ }`
+
+<blockquote> Criando uma fabrica de contexto</blockquote> 

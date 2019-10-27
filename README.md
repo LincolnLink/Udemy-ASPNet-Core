@@ -195,10 +195,16 @@ Criando MyContext e referenciar Api.Data com Api.Domain
 
 3° Foi feito um override da classe OnModelCreating(), aonde recebe o ModelBuilder como parametro!
 
-`protected override void OnModelCreating(ModelBuilder modelBuilder)
+`
+
+ protected override void OnModelCreating(ModelBuilder modelBuilder)
  {
+
  	base.OnModelCreating(modelBuilder);
- }`
+
+ }
+
+ `
 
 <blockquote> Criando uma fabrica de contexto</blockquote> 
 
@@ -212,12 +218,16 @@ E outra variavel para receber uma instancia de DbContextOptionsBuilder<MyContext
 - 4° Retorne uma instancia do MyContext, recebendo o Options como parametro!
 
 `
+
         public MyContext CreateDbContext(string[] args)
         {
             //Usando para criar a migrações
             var connectionString = "Server=localhost;Port=3306;Database=dbAPI;Uid=root;Pwd=''";
+
             var optionsBuilder = new DbContextOptionsBuilder<MyContext>();
+
             optionsBuilder.UseMySql(connectionString);
+
             return new MyContext(optionsBuilder.Options);
         }
 `
@@ -233,6 +243,7 @@ Cria uma classe com nome de UserMap, na pasta Mapping, implementa a interface ge
 Bota as referencias, e implementa a interface, assim aparece um método para você criar regras para a tabela do banco e suas propriedades!
 
 `
+
 public void Configure(EntityTypeBuilder<UserEntity> builder)
         {
             //Definindo o nome da tabela

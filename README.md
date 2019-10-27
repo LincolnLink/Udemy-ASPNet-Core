@@ -120,7 +120,7 @@ RESTFULL endereça nomes de recursos junto a métodos HTTP para realizar operaç
 - -o : nome da pasta
 - --no-https: configuração temporaria.
 
-# Vinculando aplicação com solução! 
+# Adicionando aplicação com solução! 
 
 `dotnet sln add Api.Application`
 
@@ -185,7 +185,7 @@ Criando MyContext e referenciar Api.Data com Api.Domain
 
 <blockquote> Iniciando o Contexto </blockquote>
 
-1° Foi criada uma pasta para o cextet e uma classe(MyContext), nela foi exdada uma classe chamada 'DbContext', iniciado uma propriedade(prop) chamada 'User' do tipo generico DbSet<T>, aonde T recebe a entidade que deve ser mapeada!
+1° Foi criada uma pasta para o coxtet e uma classe(MyContext), nela foi exdada uma classe chamada 'DbContext', iniciado uma propriedade(prop) chamada 'User' do tipo generico DbSet<T>, aonde T recebe a entidade que deve ser mapeada!
 
 `public DbSet<UserEntity> Users { get; set; }`
 
@@ -201,3 +201,30 @@ Criando MyContext e referenciar Api.Data com Api.Domain
  }`
 
 <blockquote> Criando uma fabrica de contexto</blockquote> 
+
+
+Criando uma Conexão
+
+- 1°Cria uma classe chamada 'CotextFactory', depois herda a classe 'IDesignTimeDbContextFactory<MyContext>' faz a referencia que pedir, e implementa a interface
+- 2° No método do contrato cria uma variavel para receber a sua connectionString!
+E outra variavel para receber uma instancia de DbContextOptionsBuilder<MyContext>();
+- 3° Use o método 'UserMySql' para fazer uma Conexão!
+- 4° Retorne uma instancia do MyContext, recebendo o Options como parametro!
+
+`
+        public MyContext CreateDbContext(string[] args)
+        {
+            //Usando para criar a migrações
+            var connectionString = "Server=localhost;Port=3306;Database=dbAPI;Uid=root;Pwd=''";
+            var optionsBuilder = new DbContextOptionsBuilder<MyContext>();
+            optionsBuilder.UseMySql(connectionString);
+            return new MyContext(optionsBuilder.Options);
+        }
+`
+
+Com isso você consegue criar as migrações!
+
+
+
+
+

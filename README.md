@@ -242,10 +242,11 @@ Cria uma classe com nome de UserMap, na pasta Mapping, implementa a interface ge
 
 Bota as referencias, e implementa a interface, assim aparece um método para você criar regras para a tabela do banco e suas propriedades!
 
-`
 
-public void Configure(EntityTypeBuilder<UserEntity> builder)
-        {
+
+`public void Configure(EntityTypeBuilder<UserEntity> builder){
+
+
             //Definindo o nome da tabela
             builder.ToTable("User");
 
@@ -273,7 +274,10 @@ Configura o mapeamento no context
 `
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+
             base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<UserEntity>(new UserMap().Configure);
         }
 `
@@ -298,7 +302,6 @@ Monstrando qual banco deve user
 - Método insert do formato async!
 
 `
-
 public async Task<T> InsertAsync(T item)
         {
             try
@@ -308,6 +311,7 @@ public async Task<T> InsertAsync(T item)
                 {
                     item.Id = Guid.NewGuid();
                 }
+
 
                 //Salva a data da criação
                 item.CreateAt = DateTime.UtcNow;
@@ -330,7 +334,6 @@ public async Task<T> InsertAsync(T item)
 - Método update do formato async!
 
 `
-
 public async Task<T> UpdateAsync(T item)
 {
     try

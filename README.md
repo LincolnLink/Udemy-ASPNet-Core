@@ -485,7 +485,7 @@ public async Task<T> SelectAsync(Guid id)
 <blockquote> Implementando o Service </blockquote> 
 
 
-- Primeiro cria uma interface no projeto de Domain, com os contratos!
+- 1° cria uma interface no projeto de Domain, com os contratos!
 
 `
 
@@ -510,8 +510,66 @@ namespace Api.Domain.Interfaces.Services.User
 
 
 
+- 2° Cria referencias para a Service!
+
+`dotnet add .\Api.Service\ reference .\Api.Domain\`
+
+`dotnet add .\Api.Service\ reference .\Api.Data\`
+
+`dotnet add .\Api.Service\ reference .\Api.CrossCutting\`
+
+- 3° A implementação
+
+Cria uma pasta chamada Service, e dentro dela uma classe chamada "UserService", implementa a interface UserService, passa as referencias para tirar os erros, e implementa a interface para poder exibir os métodos do contrato!
+
+
+`
 
 
 
+namespace Api.Service.Services
+{
+    public class UserService : IUserService
+    {
 
+        private IRepository<UserEntity> _repository;
+
+        public UserService(IRepository<UserEntity> repository)
+        {
+            _repository = repository;
+        }
+
+        public async Task<bool> Delete(Guid id)
+        {
+            return await _repository.DeleteAsync(id);
+        }
+
+        public async Task<UserEntity> Get(Guid id)
+        {
+            return await _repository.SelectAsync(id);
+        }
+
+        public async Task<IEnumerable<UserEntity>> GetAll()
+        {
+            return await _repository.SelectAcync();
+        }
+
+        public async Task<UserEntity> Post(UserEntity user)
+        {
+            return await _repository.InsertAsync(user);
+        }
+
+        public async Task<UserEntity> Put(UserEntity user)
+        {
+            return await _repository.UpdateAsync(user);
+        }
+    }
+}
+
+
+`
+
+
+Em cada método desse é possivel por as regras de negocio, o projeto de Api.Service serve para ser um intermediario do projeto Api.Aplicação para a Api.Infra/Data ! 
+OBS: não se deve por validação! 
 

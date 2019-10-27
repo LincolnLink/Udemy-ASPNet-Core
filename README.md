@@ -573,3 +573,53 @@ namespace Api.Service.Services
 Em cada método desse é possivel por as regras de negocio, o projeto de Api.Service serve para ser um intermediario do projeto Api.Aplicação para a Api.Infra/Data ! 
 OBS: não se deve por validação! 
 
+
+
+# Tratando o projeto Api.Aplication
+
+
+<blockquote> Criando a classe de controle! </blockquote> 
+
+- Adicione algumas referencias !!
+
+`dotnet add Api.Application reference Api.Domain`
+
+`dotnet add Api.Application reference Api.Service`
+
+`dotnet add Api.Application reference Api.CrossCutting`
+
+
+- Cria uma classe com nome de "UsersController"
+
+
+Criando o GetAll com tratamento
+
+`
+
+
+[HttpGet]
+        public async Task<ActionResult> GetAll([FromServices] IUserService service) //faz referencia do service
+        {
+            //Verifica se a informação que está vindo da rota é valida!
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState); //400 bad request - solicitação invalida!
+            }
+
+            try
+            {
+                return Ok(await service.GetAll());
+            }
+            catch (ArgumentException e) //trata erros de controller!
+            {
+                //Resposta para o navegador! - erro 500
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+
+        }
+
+
+
+
+
+`

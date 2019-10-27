@@ -224,7 +224,54 @@ E outra variavel para receber uma instancia de DbContextOptionsBuilder<MyContext
 
 Com isso você consegue criar as migrações!
 
+<blockquote> Mapeando a classe para o EF</blockquote> 
 
+Cria uma classe com nome de UserMap, na pasta Mapping, implementa a interface generica do tipo da classe da sua Domain!
 
+` IEntityTypeConfiguration<UserEntity> `
 
+Bota as referencias, e implementa a interface, assim aparece um método para você criar regras para a tabela do banco e suas propriedades!
 
+`
+public void Configure(EntityTypeBuilder<UserEntity> builder)
+        {
+            //Definindo o nome da tabela
+            builder.ToTable("User");
+            //Definindo a chave primaria            
+            builder.HasKey(p => p.Id);
+            //Definindo como campo unico
+            builder.HasIndex(p => p.Email)
+                   .IsUnique();
+            //Definindo como requirido e um tamanho maximo
+            builder.Property(u => u.Name)
+                   .IsRequired()
+                   .HasMaxLength(60);
+            //Definindo um tamanho maximo
+            builder.Property(u => u.Email)
+                   .HasMaxLength(100);
+        }
+`
+
+Configura o mapeamento no context
+
+`
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<UserEntity>(new UserMap().Configure);
+        }
+`
+
+<blockquote> Configurando a migração! </blockquote> 
+
+No prompt comando entra na pasta Api.Data, o unico projeto que tem o EF, para digitar o comando:
+
+` dotnet ef --help` esse comando informa os comandos principais do EF! 
+
+Adicionando na migração!
+
+`dotnet ef migrations add UserMigration`
+
+Monstrando qual banco deve user
+
+`dotnet ef database update`

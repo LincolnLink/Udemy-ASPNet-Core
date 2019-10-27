@@ -291,3 +291,71 @@ Adicionando na migração!
 Monstrando qual banco deve user
 
 `dotnet ef database update`
+
+<blockquote> Criando o Repositorio </blockquote> 
+
+
+- Método insert do formato async!
+
+`
+
+public async Task<T> InsertAsync(T item)
+        {
+            try
+            {
+                //Caso o ID esteja vasio, é criado um id
+                if (item.Id == Guid.Empty)
+                {
+                    item.Id = Guid.NewGuid();
+                }
+
+                //Salva a data da criação
+                item.CreateAt = DateTime.UtcNow;
+                _dataset.Add(item);
+
+                //o termo await faz parte do método async, salva o objeto usnado o contexto
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+            return item;
+        }
+
+`
+
+- Método update do formato async!
+
+`
+
+public async Task<T> UpdateAsync(T item)
+{
+    try
+    {
+    //Procura o objeto no banco!
+    var result = await _dataset.SingleOrDefaultAsync(p => p.Id.Equals(item.Id));
+        if (result == null)
+        {
+            return null;
+        }
+        //Caso ele exista informa a data de modificação e reforça a de criação!
+        item.UpdateAt = DateTime.UtcNow;
+        item.CreateAt = result.CreateAt;
+        //Atualiza as informações novas e salva no banco!
+        _context.Entry(result).CurrentValues.SetValues(item);
+        //ele faz o commit ou o roolback
+        await _context.SaveChangesAsync();
+    }
+    catch (Exception ex)
+    {
+        throw ex;
+    }
+    //retorna o que foi atualizado
+    return item;
+}
+
+
+`

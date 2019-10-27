@@ -58,6 +58,7 @@ namespace Api.Data.Repository
                 throw ex;
             }
 
+            //retorna o que foi inserido
             return item;
         }
 
@@ -71,9 +72,34 @@ namespace Api.Data.Repository
             throw new NotImplementedException();
         }
 
-        public Task<T> UpdateAsync(T item)
+        public async Task<T> UpdateAsync(T item)
         {
-            throw new NotImplementedException();
+            try
+            {
+                //Procura o objeto no banco!
+                var result = await _dataset.SingleOrDefaultAsync(p => p.Id.Equals(item.Id));
+                if (result == null)
+                {
+                    return null;
+                }
+
+                //Caso ele exista informa a data de modificação e reforça a de criação!
+                item.UpdateAt = DateTime.UtcNow;
+                item.CreateAt = result.CreateAt;
+
+                //Atualiza as informações novas e salva no banco!
+                _context.Entry(result).CurrentValues.SetValues(item);
+
+                //ele faz o commit ou o roolback
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            //retorna o que foi atualizado
+            return item;
         }
     }
 }

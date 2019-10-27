@@ -390,8 +390,109 @@ public async Task<T> UpdateAsync(T item)
     //retorna o que foi atualizado
     return item;
 
-    
+
 }
 
 
 `
+
+
+- Método deletar do formato async!
+
+`public async Task<bool> DeleteAsync(Guid id)
+
+        {
+
+            try
+            {
+
+                //Procura o objeto no banco!
+
+                var result = await _dataset.SingleOrDefaultAsync(p => p.Id.Equals(id));
+
+                if (result == null)
+                {
+
+                    return false;
+
+
+                }
+
+                _dataset.Remove(result);
+
+
+                await _context.SaveChangesAsync();
+
+
+                return true;
+
+
+            }
+
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
+        }`
+
+- Método async que seleciona todos ou um unico objeto!
+
+`
+
+/// <summary>
+
+/// Método async para buscar todos os registros
+/// </summary>
+/// <returns></returns>
+public async Task<IEnumerable<T>> SelectAcync()
+{
+
+            try
+            {
+
+                return await _dataset.ToListAsync();
+
+            }
+            catch (Exception ex)
+            {
+
+
+                throw ex;
+
+            }
+
+}
+`
+
+
+´
+/// <summary>
+/// Método async para buscar um objeto
+/// </summary>
+/// <param name="id"></param>
+/// <returns></returns>
+public async Task<T> SelectAsync(Guid id)
+{
+    try
+    {
+        return await _dataset.SingleOrDefaultAsync(p => p.Id.Equals(id));
+    }
+    catch (Exception ex)
+    {
+
+        throw ex;
+    }
+}
+
+´
+
+
+
+# TODO
+
+
+
+

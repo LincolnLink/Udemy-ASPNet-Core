@@ -16,5 +16,6 @@ namespace Api.Domain.Interfaces
         Task<T> SelectAsync(Guid id);
 
         Task<IEnumerable<T>> SelectAcync();
+
     }
 }

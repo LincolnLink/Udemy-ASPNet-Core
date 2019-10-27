@@ -1,5 +1,9 @@
 # Udemy-ASPNet-Core
-Desenvolvendo uma API com Dot.Net 2.2 com ajuda de um curso da Udemy
+Desenvolvendo uma API com ajuda de um curso da Udemy
+
+- [x] Dot.Net 2.2
+- [x] MySQL
+- [x] Entity Framework Core
 
 ## Extension install
 

@@ -1,5 +1,5 @@
 # Udemy-ASPNet-Core
-Desenvolvendo uma API com ajuda de um curso da Udemy
+Desenvolvendo uma API com Dot.Net 2.2 com ajuda de um curso da Udemy
 
 ## Extension install
 
@@ -442,11 +442,6 @@ public async Task<T> UpdateAsync(T item)
 
 `
 
-/// <summary>
-
-/// Método async para buscar todos os registros
-/// </summary>
-/// <returns></returns>
 public async Task<IEnumerable<T>> SelectAcync()
 {
 
@@ -463,19 +458,13 @@ public async Task<IEnumerable<T>> SelectAcync()
                 throw ex;
 
             }
-
 }
 `
 
 
 ´
-/// <summary>
-/// Método async para buscar um objeto
-/// </summary>
-/// <param name="id"></param>
-/// <returns></returns>
 public async Task<T> SelectAsync(Guid id)
-{
+{    
     try
     {
         return await _dataset.SingleOrDefaultAsync(p => p.Id.Equals(id));
@@ -489,9 +478,9 @@ public async Task<T> SelectAsync(Guid id)
 
 ´
 
+# Api.Service
 
 
-# TODO
 
 
 

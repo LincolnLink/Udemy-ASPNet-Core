@@ -622,8 +622,23 @@ Criando o GetAll com tratamento
 
         }
 
-
-
-
-
 `
+vai da erro precisa tratar a injeção de dependencia e o projeto CrossCutting
+
+
+- Adiciona mais ferefencia
+
+`dotnet add .\Api.CrossCutting\ reference .\Api.Domain\`
+
+`dotnet add .\Api.CrossCutting\ reference .\Api.Service\`
+
+`dotnet add .\Api.CrossCutting\ reference .\Api.Data\`
+
+Vai aparecer outro erro de , referencia circular , para re solver re mova a referencia CrossCutting do projeto de service
+
+- instala o AutoMaper
+
+`dotnet add package AutoMapper.Extensions.Microsoft.DependencyInjection --version 7.0.0`
+
+parei na 68
+

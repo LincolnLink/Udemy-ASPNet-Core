@@ -12,9 +12,17 @@ namespace Api.Application.Controllers
     public class UsersController : ControllerBase
     {
 
-        [HttpGet]
-        public async Task<ActionResult> GetAll([FromServices] IUserService service) //faz referencia do service
+        private IUserService _service;
+        public UsersController(IUserService service)
         {
+            _service = service;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> GetAll() //faz referencia do service
+        {
+            //parametro removido: [FromServices] IUserService service
+
             //Verifica se a informação que está vindo da rota é valida!
             if (!ModelState.IsValid)
             {
@@ -23,7 +31,8 @@ namespace Api.Application.Controllers
 
             try
             {
-                return Ok(await service.GetAll());
+                return Ok(await _service.GetAll());
+                //return Ok(await service.GetAll());
             }
             catch (ArgumentException e) //trata erros de controller!
             {
@@ -33,5 +42,28 @@ namespace Api.Application.Controllers
 
         }
 
+        //localhost:5000/api/users/id
+        [HttpGet]
+        [Route("{id}", Name = "GetWithId")]
+        public async Task<ActionResult> Get(Guid id)
+        {
+            //Verifica se a informação que está vindo da rota é valida!
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState); //400 bad request - solicitação invalida!
+            }
+
+            try
+            {
+                return Ok(await _service.Get(id));
+                //return Ok(await service.GetAll());
+            }
+            catch (ArgumentException e) //trata erros de controller!
+            {
+                //Resposta para o navegador! - erro 500
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+
+        }
     }
 }

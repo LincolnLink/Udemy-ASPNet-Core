@@ -640,5 +640,17 @@ Vai aparecer outro erro de , referencia circular , para re solver re mova a refe
 
 `dotnet add package AutoMapper.Extensions.Microsoft.DependencyInjection --version 7.0.0`
 
-parei na 68
+
+
+
+.............
+
+# Instalando e usando o Swagger!
+
+- Swashbuckle.Aps.NetCore
+
+https://www.nuget.org/packages/Swashbuckle.AspNetCore/5.0.0-rc4
+
+dotnet add package Swashbuckle.AspNetCore --version 4.0.1
+<blockquote>foi instalada na Api.Application !</blockquote> 
 

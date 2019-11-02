@@ -4,6 +4,7 @@ Desenvolvendo uma API com ajuda de um curso da Udemy
 - [x] Dot.Net 2.2
 - [x] MySQL
 - [x] Entity Framework Core
+- [x] Swagger 4.0.1
 
 ## Extension install
 
@@ -654,3 +655,56 @@ https://www.nuget.org/packages/Swashbuckle.AspNetCore/5.0.0-rc4
 dotnet add package Swashbuckle.AspNetCore --version 4.0.1
 <blockquote>foi instalada na Api.Application !</blockquote> 
 
+configuração feita na classe Startup
+
+- Configuração do Swagger! (antes do addMVC)
+
+`
+
+services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1",
+                new Info
+                {
+                    Title = "API AspNetCore 2.2",
+                    Version = "v1",
+                    Description = "Exemplo de API REST criado com ASP.NET Core",
+                    Contact = new Contact
+                    {
+                        Name = "Lincoln Ferreira Campos",
+                        Url = "https://github.com/LincolnLink"
+                    }
+                });
+            });
+
+
+`
+
+
+
+- Ativando middlewares paa uso do Swagger (no método Configure, antes do app.usemvc)
+
+
+`
+
+
+app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.RoutePrefix = string.Empty;
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "API com AspNetCore 2.2");
+            });
+`
+
+
+- Redireciona o Link para o Swagger, quando acessar a rota principal (no método Configure, antes do app.usemvc)
+
+`
+
+
+
+var option = new RewriteOptions();
+            option.AddRedirect("^$", "swagger");
+            app.UseRewriter(option);
+
+`

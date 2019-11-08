@@ -708,3 +708,8 @@ var option = new RewriteOptions();
             app.UseRewriter(option);
 
 `
+
+
+# Resolvendo problema com politica de requisição
+
+https://stackoverflow.com/questions/54085677/how-to-configure-angular-6-with-net-core-2-to-allow-cors-from-any-host

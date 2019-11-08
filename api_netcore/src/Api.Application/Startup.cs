@@ -49,6 +49,16 @@ namespace Application
                 });
             });
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials()
+                );
+            });
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
         }
@@ -74,6 +84,7 @@ namespace Application
             option.AddRedirect("^$", "swagger");
             app.UseRewriter(option);
 
+            app.UseCors("CorsPolicy");
 
             app.UseMvc();
         }

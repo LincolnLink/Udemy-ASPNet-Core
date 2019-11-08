@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Api.Domain.Entities;
 using Api.Domain.Interfaces.Services.User;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Application.Controllers
@@ -20,6 +21,7 @@ namespace Api.Application.Controllers
         }
 
         [HttpGet]
+        [EnableCors("CorsPolicy")]
         public async Task<ActionResult> GetAll() //faz referencia do service
         {
             //parametro removido: [FromServices] IUserService service
@@ -45,6 +47,7 @@ namespace Api.Application.Controllers
 
         //localhost:5000/api/users/id
         [HttpGet]
+        [EnableCors("CorsPolicy")]
         [Route("{id}", Name = "GetWithId")]
         public async Task<ActionResult> Get(Guid id)
         {
@@ -67,6 +70,7 @@ namespace Api.Application.Controllers
         }
 
         [HttpPost]
+        [EnableCors("CorsPolicy")]
         public async Task<ActionResult> Post([FromBody] UserEntity user)
         {
             //Verifica se a informação que está vindo da rota é valida!
@@ -95,6 +99,7 @@ namespace Api.Application.Controllers
         }
 
         [HttpPut]
+        [EnableCors("CorsPolicy")]
         public async Task<ActionResult> Put([FromBody] UserEntity user)
         {
             //Verifica se a informação que está vindo da rota é valida!
@@ -123,7 +128,8 @@ namespace Api.Application.Controllers
 
         }
 
-        [HttpDelete] //("{id}")
+        [HttpDelete("{id}")] //("{id}")
+        [EnableCors("CorsPolicy")]
         public async Task<ActionResult> Delete(Guid id)
         {
             //Verifica se a informação que está vindo da rota é valida!

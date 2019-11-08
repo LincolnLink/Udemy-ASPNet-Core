@@ -38,7 +38,7 @@ namespace Api.Data.Repository
             try
             {
                 //Procura o objeto no banco!
-                var result = await _dataset.SingleOrDefaultAsync(p => p.Id.Equals(id));
+                var result = await _dataset.SingleOrDefaultAsync(p => p.Id == id);
                 if (result == null)
                 {
                     return false;

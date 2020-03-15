@@ -14,7 +14,7 @@ namespace Api.Domain.Entities
             get { return _createAt; }
             set { _createAt = (value == null ? DateTime.UtcNow : value); }
         }
-
+        //segundo branch - teste
         public DateTime? UpdateAt { get; set; }
     }
 }

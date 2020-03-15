@@ -38,14 +38,6 @@ cmd personalizado: https://cmder.net/
 `dotnet sln add 'nomeDoProjeto'`
 
 
-# Executando um projeto
-
-`dotnet run`
-
-# Buildando 
-
-`dotnet build`
-
 
 # Limpando a aplicação
 
@@ -55,6 +47,21 @@ cmd personalizado: https://cmder.net/
 # Restalrando a aplicação
 
 `dotnet restore`
+
+
+
+
+# Buildando 
+
+`dotnet build`
+
+
+
+# Executando um projeto
+
+`dotnet run`
+
+
 
 
 # Criando Pagina 

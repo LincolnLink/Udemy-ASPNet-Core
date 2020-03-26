@@ -173,12 +173,43 @@ Com essa configuração é possivel debugar a aplicação!! (#42)
 
 depois pode buildar usando `dotnet build`
 
+# Entidades
+
+É uma representação da tabela de dados!
+
+- Propriedades padrão de toda entidade: 
+
+````dir
+    public abstract class BaseEntity
+    {
+        [Key]
+        public Guid Id { get; set; }
+
+        private DateTime? _createAt;
+        public DateTime? CreateAt
+        {
+            get { return _createAt; }
+            set { _createAt = (value == null ? DateTime.UtcNow : value); }
+        }
+
+        public DateTime? UpdateAt { get; set; }
+    }
+
+
+    public class UserEntity : BaseEntity
+    {
+        public string Name { get; set; }
+
+        public string Email { get; set; }
+
+    }
+````
 
 # Instalando o EntityFrameWork (Microsoft.EntityFrameworkCore.Tools)
 
 Site: https://www.nuget.org/
 
-- NET CLI do pacote Entity
+- Instala no projeto Data! os 3 pacotes do Entity
 
 `dotnet add package Microsoft.EntityFrameworkCore.Tools --version 2.2.6`
 
@@ -189,15 +220,17 @@ Site: https://www.nuget.org/
 
 # Configurando o EntityFrameWork
 
-Criando MyContext e referenciar Api.Data com Api.Domain
+- Criando uma referencia do projeto Api.Domain para o projeto Api.Data!
 
-- Comando que adiciona referencia
+    Na pasta src digita o comando: 
 
-`dotnet add .\Api.Data\ reference .\Api.Domain\`
+    `dotnet add .\Api.Data\ reference .\Api.Domain\`
 
-<blockquote> Iniciando o Contexto </blockquote>
+- Criando as pastas da configuração!
 
-1° Foi criada uma pasta para o coxtet e uma classe(MyContext), nela foi exdada uma classe chamada 'DbContext', iniciado uma propriedade(prop) chamada 'User' do tipo generico DbSet<T>, aonde T recebe a entidade que deve ser mapeada!
+    Foi criada uma pasta "Context" e uma classe(MyContext), outra pasta chamada "Mapping", a ultima pasta chamada "Repository"
+
+    -- A classe "MyContext" herdada uma classe chamada 'DbContext', iniciado uma propriedade(prop) chamada 'User' do tipo generico DbSet<T>, aonde T recebe a entidade que deve ser mapeada!
 
 `public DbSet<UserEntity> Users { get; set; }`
 

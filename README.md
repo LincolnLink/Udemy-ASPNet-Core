@@ -290,10 +290,10 @@ Site: https://www.nuget.org/
         {            
             var connectionString = "Server=localhost;Port=3306;Database=dbAPI;Uid=root;Pwd=84190162";
 
-            var optionsBuilder = new DbContextOptionsBuilder<MyContext>();
+            var optionsBuilder = new DbContextOptionsBuilder< MyContext>();
 
-            optionsBuilder.UseMySql(connectionString);
-            
+            optionsBuilder.UseMySql(connectionString);        
+                
             return new MyContext(optionsBuilder.Options);
         }
     }

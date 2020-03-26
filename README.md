@@ -23,17 +23,17 @@ Desenvolvendo uma API com ajuda de um curso da Udemy
 # API e Micro serviços (#37)
 
 - API: 
-Quando você desenvolve um sistema completo ultilizando o mesmo banco de dados,
-exemplo: faturamento, estoque, Financeiro, Vendas, etc.
+    Quando você desenvolve um sistema completo ultilizando o mesmo banco de dados,
+    exemplo: faturamento, estoque, Financeiro, Vendas, etc.
 
-Ira subir esta aplicação em uma instancia e consegue escalar aumentando recursos!
+    Ira subir esta aplicação em uma instancia e consegue escalar aumentando recursos!
 
 - Microsserviços (MS): 
-O conceito principal é quebrar a API, cria um MS para faturamento, usando um banco de dados só para ele, cria outro MS de estoque, ultilizando um outro banco de dados só para ele!
+    O conceito principal é quebrar a API, cria um MS para faturamento, usando um banco de dados só para ele, cria outro MS de estoque, ultilizando um outro banco de dados só para ele!
 
-Com isso você consegue por cada MS em uma instancia diferente, e até mesmo escrevendo com linguagens de programação diferentes e banco de dados diferentes!
+    Com isso você consegue por cada MS em uma instancia diferente, e até mesmo escrevendo com linguagens de programação diferentes e banco de dados diferentes!
 
-Para fazer os MS conversar, precisa criar um Orquestrador!
+    Para fazer os MS conversar, precisa criar um Orquestrador!
 
 
 
@@ -41,19 +41,19 @@ Para fazer os MS conversar, precisa criar um Orquestrador!
 
 - Rotas: 
 
-ex: http://site.com.br/clientes(GET,POST), http://site.com.br/clientes(GET,UPDATE,PATCH,DELETE)
+    ex: http://site.com.br/clientes(GET,POST), http://site.com.br/clientes(GET,UPDATE,PATCH,DELETE)
 
 
 - REST: 
-É uma arquitetura que propõe basicamente a padronização de rotas de API na comunicação cliente/servidor.
+    É uma arquitetura que propõe basicamente a padronização de rotas de API na comunicação cliente/servidor.
 
-requisições HTTP enviadas: http://site.com.br/objeto/ação e retornos de texto puro ou dados estruturados e serializados como JSOM E XML.
+    requisições HTTP enviadas: http://site.com.br/objeto/ação e retornos de texto puro ou dados estruturados e serializados como JSOM E XML.
 
 
 - RESTFULL
-É um sistemas API arquitetados como vistas a acessos REST e uso semantico dos métodos HTTP GET, POST, PUT, PATCH, DELETE são chamados RESTFULL.
+    É um sistemas API arquitetados como vistas a acessos REST e uso semantico dos métodos HTTP GET, POST, PUT, PATCH, DELETE são chamados RESTFULL.
 
-RESTFULL endereça nomes de recursos junto a métodos HTTP para realizar operações.
+    RESTFULL endereça nomes de recursos junto a métodos HTTP para realizar operações.
 
 
 

@@ -256,9 +256,9 @@ Site: https://www.nuget.org/
     <blockquote>public DbSet<UserEntity> Users { get; set; }</blockquote>
 
     2° No método construtor da classe MyContext.cs, se passa um parametro chamado "options",
-    do tipo generico DbContextOptions<T>, aonde T é a propria classe de contexto! 
+    do tipo generico DbContextOptions<T>, aonde T é a propria classe de contexto, criando uma configração de base!
 
-    <blockquote>public MyContext(DbContextOptions<MyContext> options) : base(options){}</blockquote>
+    <blockquote>public MyContext(DbContextOptions< MyContext> options) : base(options){}</blockquote>
 
     3° Foi feito um override da classe OnModelCreating(), aonde recebe o ModelBuilder como parametro!
 

@@ -3,7 +3,7 @@ Desenvolvendo uma API com ajuda de um curso da Udemy
 
 - [x] Dot.Net 2.2
 - [x] MySQL
-- [x] Entity Framework Core
+- [x] Entity Framework Core 2.2.6
 - [x] Swagger 4.0.1
 
 ## Extension install
@@ -13,96 +13,29 @@ Desenvolvendo uma API com ajuda de um curso da Udemy
 - [x] C# XML Documentation Comments
 - [x] vscode-icons
 
-cmd personalizado: https://cmder.net/
+## Programas
 
-### Lista de opções de projetos
-
-<blockquote>dotnet new</blockquote>
-
-
-## Comando para criar uma solution
-
-<blockquote>dotnet new sln --name CSharpBasico</blockquote>
+- [x] cmd personalizado: https://cmder.net/
+- [x] Visual Studio Code
 
 
-# Criando um projeto em console com uma pasta 
-
-`dotnet new console -n HelloWorld -o helloWorld`
-
-- -n: nome do projeto console!
-- -o: nome da pasta!
-
-
-# Vinculando um projeto a uma solução existente
-
-`dotnet sln add 'nomeDoProjeto'`
-
-
-
-# Limpando a aplicação
-
-`dotnet clean`
-
-
-# Restalrando a aplicação
-
-`dotnet restore`
-
-
-
-
-# Buildando 
-
-`dotnet build`
-
-
-
-# Executando um projeto
-
-`dotnet run`
-
-
-
-
-# Criando Pagina 
-
-`md "nome da pagina"`
-
-
-# Abrir o codigo no VS code
-
-`code .`
-
-
-# Configurando o VS code para dotnet core (#33)
-
-files -> referencia -> settings
-
-# Baixando extenções
-
-https://www.nuget.org/
-
-CLI do .NET :
-
-ex: dotnet add package Microsoft.EntityFrameworkCore - versão 2.2.6
-
-dotnet add package Pomelo.EntityFrameworkCore.MySql --version 3.0.0-rc1.final
 
 # API e Micro serviços (#37)
 
 - API: 
-Quando você desenvolve um sistea completo ultilizando o mesmo banco de dados,
+Quando você desenvolve um sistema completo ultilizando o mesmo banco de dados,
 exemplo: faturamento, estoque, Financeiro, Vendas, etc.
 
-Irasubir esta aplicação em uma instancia e consegue escalar aumentando recursos!
+Ira subir esta aplicação em uma instancia e consegue escalar aumentando recursos!
 
-
-- MS: 
+- Microsserviços (MS): 
 O conceito principal é quebrar a API, cria um MS para faturamento, usando um banco de dados só para ele, cria outro MS de estoque, ultilizando um outro banco de dados só para ele!
 
-Com isso você consegue por cada micro servico em uma instancia diferente, e até mesmo escrevendo com linguagens de programação diferentes e banco de dados diferentes!
+Com isso você consegue por cada MS em uma instancia diferente, e até mesmo escrevendo com linguagens de programação diferentes e banco de dados diferentes!
 
 Para fazer os MS conversar, precisa criar um Orquestrador!
+
+
 
 # Rotas / REST / RESTFULL
 
@@ -124,164 +57,243 @@ RESTFULL endereça nomes de recursos junto a métodos HTTP para realizar operaç
 
 
 
-# Criando uma aplicação em WebApi (Aplication)
+# Comandos basicos do DotNet
 
-`dotnet new webapi -n Application -o Api.Application --no-https`
+### Comando para criar uma solution!
 
-- -n : nome da aplicação
-- -o : nome da pasta
-- --no-https: configuração temporaria.
+<blockquote>dotnet new sln --name CSharpBasico</blockquote>
 
-# Adicionando aplicação com solução! 
+### Comando que lista opções de projetos!
 
-`dotnet sln add Api.Application`
+<blockquote>dotnet new</blockquote>
 
-- 1° depois disso deve buildar `dotnet build`, 
-- 2° depois voltar para a raiz `cd ..`,
-- 3° depois disso deve abrir o codigo `code .` , vai aparecer uma mensagem, pedindo para debugar, clica em YES! 
+### Comando para criar um projeto, com uma pasta!
 
-Com essa configuração é possivel debugar a aplicação!! (#42)
+<blockquote>dotnet new console -n HelloWorld -o helloWorld</blockquote>
 
-# Criando o Dominio, bibliotecas de classe (Domain)
+- -n: nome do projeto console!
+- -o: nome da pasta!
 
-`dotnet new classlib -n Domain -f netcoreapp2.2 -o Api.Domain`
+### Comando que Vincula um projeto a uma solução existente
 
-- -n: nome da biblioteca de classe.
-- -f tipo da biblioteca de classe.
-- -o cria uma pasta para a biblioteca de classe
+<blockquote>dotnet sln add 'nomeDoProjeto'</blockquote>
 
-# Adicionando a lib na solução
+### Comando que limpando a aplicação
 
-`dotnet sln add Api.Domain`
+<blockquote>dotnet clean</blockquote>
 
-- "Api.Domain" nome da pasta da lib !
+### Comando que restalra a aplicação
+
+<blockquote>dotnet restore</blockquote>
+
+### Comando para Buildar a aplicação!
+
+<blockquote>dotnet build</blockquote>
+
+### Comando que Executa um projeto
+
+<blockquote>dotnet run</blockquote>
+
+### Comando que Abre o codigo no VS code
+
+<blockquote>code .</blockquote>
+
+### Comando que criando uma pasta
+
+<blockquote>md "nome da pagina"</blockquote>
+
+
+
+# Configurando o VS code para dotnet core (#33)
+
+files -> referencia -> settings
+
+
+
+# Criando uma aplicação em WebApi e o projeto principal (Application)
+
+- Você deve criar uma solução, com o nome de "Api"!
+
+    <blockquote>dotnet new sln --name Api</blockquote>
+
+- Criando o projeto chamado "Application"!
+
+    <blockquote>dotnet new webapi -n Application -o Api.Application --no-https</blockquote>
+
+    - -n : nome da aplicação
+    - -o : nome da pasta
+    - --no-https: configuração temporaria.
+
+    Adicionando aplicação com solução:
+
+    <blockquote>dotnet sln add Api.Application</blockquote>
+
+    - 1° depois disso deve buildar <blockquote>dotnet build</blockquote>, 
+    - 2° depois voltar para a raiz <blockquote>cd ..</blockquote>,
+    - 3° depois disso deve abrir o codigo <blockquote>code .</blockquote> , vai aparecer uma mensagem, pedindo para debugar, clica em YES! 
+
+    Com essa configuração é possivel debugar a aplicação!! (#42)
+
+
+
+# Criando o projeto Dominio (Domain)
+
+- Criando o projeto chamado "Domain" com uma pasta!
+
+    <blockquote>dotnet new classlib -n Domain -f netcoreapp2.2 -o Api.Domain</blockquote>
+
+    - -n: nome da biblioteca de classe.
+    - -f tipo da biblioteca de classe.
+    - -o cria uma pasta para a biblioteca de classe
+
+    Adicionando a lib na solução:
+
+    <blockquote>dotnet sln add Api.Domain</blockquote>
+
+
+# Criando o projeto Service (Service)
+
+- Criando o projeto chamado "Service" com uma pasta!
+
+    <blockquote>dotnet new classlib -n Service -f netcoreapp2.2 -o Api.Service</blockquote>
+
+    - -n: nome da biblioteca de classe.
+    - -f tipo da biblioteca de classe.
+    - -o cria uma pasta para a biblioteca de classe
+
+    Adicionando a lib na solução:
+
+    <blockquote>dotnet sln add Api.Service</blockquote>
+
+
 
 # Criando a lib Api.CrossCutting e Api.Data (Infra Estrutura)
 
-`dotnet new classlib -n CrossCutting -f netcoreapp2.2 -o ApiCrossCutting`
+- Criando o projeto chamado "Api.Data" e Api.CrossCutting com uma pasta!
 
-`dotnet new classlib -n Data -f netcoreapp2.2 -o Api.Data  `
+    <blockquote>dotnet new classlib -n CrossCutting -f netcoreapp2.2 -o ApiCrossCutting</blockquote>
 
-- -n CrossCutting: nome da classlib
-- -f netcoreapp2.2: o tipo da classlib
-- -o ApiCrossCutting: criando a pasta da lib
+    <blockquote>dotnet new classlib -n Data -f netcoreapp2.2 -o Api.Data</blockquote>
 
-# Adicionando a lib na solução
+    - -n CrossCutting: nome da classlib
+    - -f netcoreapp2.2: o tipo da classlib
+    - -o ApiCrossCutting: criando a pasta da lib
 
-`dotnet sln add Api.CrossCutting`
-`dotnet sln add Api.Data`
+    Adicionando a lib na solução:
 
-depois pode buildar usando `dotnet build`
+    <blockquote>dotnet sln add Api.CrossCutting</blockquote>
+    <blockquote>dotnet sln add Api.Data</blockquote>
+
+    depois pode buildar usando <blockquote>dotnet build</blockquote>
+
+
 
 # Criando e configurando uma Entidade!
 
-Uma Entidade é ultilizada para representar uma tabela de dados, a entidade "BaseEntity" é a classe que tem as propriedades padrão,
-propriedades que toda entidade vai ter, ela foi criada separada pra que toda entidade herda ela!
+- Uma Entidade é ultilizada para representar uma tabela de dados, a entidade "BaseEntity" é a classe que tem as propriedades padrão, propriedades que toda entidade vai ter, ela foi criada separada pra que toda entidade herda ela!
 
-````
-    public abstract class BaseEntity
-    {
-        [Key]
-        public Guid Id { get; set; }
+    <blockquote>
 
-        private DateTime? _createAt;
-        public DateTime? CreateAt
+        public abstract class BaseEntity
         {
-            get { return _createAt; }
-            set { _createAt = (value == null ? DateTime.UtcNow : value); }
+            [Key]
+            public Guid Id { get; set; }
+
+            private DateTime? _createAt;
+            public DateTime? CreateAt
+            {
+                get { return _createAt; }
+                set { _createAt = (value == null ? DateTime.UtcNow : value); }
+            }
+
+            public DateTime? UpdateAt { get; set; }
         }
 
-        public DateTime? UpdateAt { get; set; }
-    }
+
+        public class UserEntity : BaseEntity
+        {
+            public string Name { get; set; }
+
+            public string Email { get; set; }
+
+        }
+    </blockquote>
 
 
-    public class UserEntity : BaseEntity
-    {
-        public string Name { get; set; }
 
-        public string Email { get; set; }
-
-    }
-````
-
-# Instalando o EntityFrameWork (Microsoft.EntityFrameworkCore.Tools)
+# Instalando e configurando o EntityFrameWork
 
 Site: https://www.nuget.org/
 
-- Instala no projeto Data! os 3 pacotes do EntityFrameWorkCore version 2.2.6 
+- Instala no projeto "Data", os 3 pacotes do EntityFrameWorkCore version 2.2.6 
 
-`dotnet add package Microsoft.EntityFrameworkCore.Tools --version 2.2.6`
+    <blockquote>dotnet add package Microsoft.EntityFrameworkCore.Tools --version 2.2.6</blockquote>
 
-`dotnet add package Microsoft.EntityFrameworkCore.Design --version 2.2.6`
+    <blockquote>dotnet add package Microsoft.EntityFrameworkCore.Design --version 2.2.6</blockquote>
 
-`dotnet add package Pomelo.EntityFrameworkCore.MySql --version 2.2.6`
+    <blockquote>dotnet add package Pomelo.EntityFrameworkCore.MySql --version 2.2.6</blockquote>
 
+- Criando uma referencia do projeto Api.Domain para o projeto "Data"!
 
-# Configurando o EntityFrameWork
+    Execute na pasta /src digita o comando: 
 
-- Criando uma referencia do projeto Api.Domain para o projeto Api.Data!
+    <blockquote>dotnet add .\Api.Data\ reference .\Api.Domain\</blockquote>
 
-    Na pasta src digita o comando: 
+- Criando as pastas da configuração no projeto "Data"!
 
-    `dotnet add .\Api.Data\ reference .\Api.Domain\`
+    Foi criada as pastas: "Context", "Mapping" e "Repository"
 
-- Criando as pastas da configuração!
-
-    Foi criada uma pasta "Context",
-    Uma pasta chamada "Mapping",
-    E uma pasta chamada "Repository"
+    <blockquote>md nomeDaPasta</blockquote>
 
 - Criando e configurando o arquivo da classe "MyContext.cs"
 
-1° A classe "MyContext" fica dentro da pasta "Context", ela herdada uma classe chamada 'DbContext',
-   Cria uma propriedade(prop) chamada 'User' do tipo generico DbSet<T>,
-   Aonde T recebe a entidade que deve ser mapeada!
+    1° A classe "MyContext" fica dentro da pasta "Context", ela herdada uma classe chamada 'DbContext',
+    cria uma propriedade(prop) chamada 'User' do tipo generico DbSet<T>,
+    aonde T recebe a entidade que deve ser mapeada!
 
-   `public DbSet<UserEntity> Users { get; set; }`
+    <blockquote>public DbSet<UserEntity> Users { get; set; }<blockquote>
 
-2° No método construtor da classe MyContext.cs, se passa um parametro chamado "options",
-   Do tipo generico DbContextOptions<T>, aonde T é a propria classe de contexto! 
+    2° No método construtor da classe MyContext.cs, se passa um parametro chamado "options",
+    do tipo generico DbContextOptions<T>, aonde T é a propria classe de contexto! 
 
-   `public MyContext(DbContextOptions<MyContext> options) : base(options){}`
+    <blockquote>public MyContext(DbContextOptions<MyContext> options) : base(options){}</blockquote>
 
-3° Foi feito um override da classe OnModelCreating(), aonde recebe o ModelBuilder como parametro!
+    3° Foi feito um override da classe OnModelCreating(), aonde recebe o ModelBuilder como parametro!
 
-`
+    <blockquote>
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+    }
+    </blockquote>
 
- protected override void OnModelCreating(ModelBuilder modelBuilder)
- {
+- Criando e configurando o arquivo de classe "CotextFactory", uma fabrica de contexto!
 
- 	base.OnModelCreating(modelBuilder);
+    Criando uma Conexão!
 
- }
+    1°Cria uma classe chamada 'CotextFactory', depois herda a classe 'IDesignTimeDbContextFactory<MyContext>' faz a referencia que pedir, e implementa a interface
 
- `
+    2° No método do contrato cria uma variavel para receber a sua connectionString!
 
-<blockquote> Criando uma fabrica de contexto</blockquote> 
+    e outra variavel para receber uma instancia de DbContextOptionsBuilder<MyContext>();
+    3° Use o método 'UserMySql' para fazer uma Conexão!
 
+    4° Retorne uma instancia do MyContext, recebendo o Options como parametro!
 
-Criando uma Conexão
+    <blockquote>
+    public MyContext CreateDbContext(string[] args)
+    {
+        //Usando para criar a migrações
+        var connectionString = "Server=localhost;Port=3306;Database=dbAPI;Uid=root;Pwd=''";
 
-- 1°Cria uma classe chamada 'CotextFactory', depois herda a classe 'IDesignTimeDbContextFactory<MyContext>' faz a referencia que pedir, e implementa a interface
-- 2° No método do contrato cria uma variavel para receber a sua connectionString!
-E outra variavel para receber uma instancia de DbContextOptionsBuilder<MyContext>();
-- 3° Use o método 'UserMySql' para fazer uma Conexão!
-- 4° Retorne uma instancia do MyContext, recebendo o Options como parametro!
+        var optionsBuilder = new DbContextOptionsBuilder<MyContext>();
 
-`
+        optionsBuilder.UseMySql(connectionString);
 
-        public MyContext CreateDbContext(string[] args)
-        {
-            //Usando para criar a migrações
-            var connectionString = "Server=localhost;Port=3306;Database=dbAPI;Uid=root;Pwd=''";
+        return new MyContext(optionsBuilder.Options);
+    }
+    </blockquote>
 
-            var optionsBuilder = new DbContextOptionsBuilder<MyContext>();
-
-            optionsBuilder.UseMySql(connectionString);
-
-            return new MyContext(optionsBuilder.Options);
-        }
-`
 
 Com isso você consegue criar as migrações!
 

@@ -128,10 +128,6 @@ Desenvolvendo uma API com ajuda de um curso da Udemy
 
     <blockquote> dotnet sln add Api.Application</blockquote>
 
-    - 1° depois disso deve buildar <blockquote>dotnet build</blockquote>, 
-    - 2° depois voltar para a raiz <blockquote>cd ..</blockquote>,
-    - 3° depois disso deve abrir o codigo <blockquote>code .</blockquote> , vai aparecer uma mensagem, pedindo para debugar, clica em YES! 
-
     Com essa configuração é possivel debugar a aplicação!! (#42)
 
 
@@ -233,11 +229,15 @@ Site: https://www.nuget.org/
 
     <blockquote>dotnet add package Pomelo.EntityFrameworkCore.MySql --version 2.2.6</blockquote>
 
-- Criando uma referencia do projeto Api.Domain para o projeto "Data"!
+
+
+- Criando uma referencia do projeto "Domain" para o projeto "Data"!
 
     Execute na pasta /src digita o comando: 
 
     <blockquote>dotnet add .\Api.Data\ reference .\Api.Domain\</blockquote>
+
+
 
 - Criando as pastas da configuração no projeto "Data"!
 
@@ -245,13 +245,15 @@ Site: https://www.nuget.org/
 
     <blockquote>md nomeDaPasta</blockquote>
 
+
+
 - Criando e configurando o arquivo da classe "MyContext.cs"
 
     1° A classe "MyContext" fica dentro da pasta "Context", ela herdada uma classe chamada 'DbContext',
     cria uma propriedade(prop) chamada 'User' do tipo generico DbSet<T>,
     aonde T recebe a entidade que deve ser mapeada!
 
-    <blockquote>public DbSet<UserEntity> Users { get; set; }<blockquote>
+    <blockquote>public DbSet<UserEntity> Users { get; set; }</blockquote>
 
     2° No método construtor da classe MyContext.cs, se passa um parametro chamado "options",
     do tipo generico DbContextOptions<T>, aonde T é a propria classe de contexto! 
@@ -266,6 +268,8 @@ Site: https://www.nuget.org/
         base.OnModelCreating(modelBuilder);
     }
     </blockquote>
+
+
 
 - Criando e configurando o arquivo de classe "CotextFactory", uma fabrica de contexto!
 
@@ -293,7 +297,6 @@ Site: https://www.nuget.org/
         return new MyContext(optionsBuilder.Options);
     }
     </blockquote>
-
 
 Com isso você consegue criar as migrações!
 

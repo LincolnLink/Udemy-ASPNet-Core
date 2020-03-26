@@ -114,11 +114,11 @@ Desenvolvendo uma API com ajuda de um curso da Udemy
 
 - Você deve criar uma solução, com o nome de "Api"!
 
-<blockquote>dotnet new sln --name Api</blockquote>
+    <blockquote> dotnet new sln --name Api</blockquote>
 
 - Criando o projeto chamado "Application"!
 
-<blockquote>dotnet new webapi -n Application -o Api.Application --no-https</blockquote>
+    <blockquote> dotnet new webapi -n Application -o Api.Application --no-https</blockquote>
 
     - -n : nome da aplicação
     - -o : nome da pasta
@@ -126,7 +126,7 @@ Desenvolvendo uma API com ajuda de um curso da Udemy
 
     Adicionando aplicação com solução:
 
-    <blockquote>dotnet sln add Api.Application</blockquote>
+    <blockquote> dotnet sln add Api.Application</blockquote>
 
     - 1° depois disso deve buildar <blockquote>dotnet build</blockquote>, 
     - 2° depois voltar para a raiz <blockquote>cd ..</blockquote>,

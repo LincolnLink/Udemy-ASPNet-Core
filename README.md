@@ -106,7 +106,7 @@ Desenvolvendo uma API com ajuda de um curso da Udemy
 
 # Configurando o VS code para dotnet core (#33)
 
-files -> referencia -> settings
+<blockquote>files -> referencia -> settings</blockquote>
 
 
 
@@ -114,11 +114,11 @@ files -> referencia -> settings
 
 - Você deve criar uma solução, com o nome de "Api"!
 
-    <blockquote>dotnet new sln --name Api</blockquote>
+<blockquote>dotnet new sln --name Api</blockquote>
 
 - Criando o projeto chamado "Application"!
 
-    <blockquote>dotnet new webapi -n Application -o Api.Application --no-https</blockquote>
+<blockquote>dotnet new webapi -n Application -o Api.Application --no-https</blockquote>
 
     - -n : nome da aplicação
     - -o : nome da pasta

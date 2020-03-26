@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Api.Domain.Entities
 {
+    /// Para ser herdada precisa por abstract!
     public abstract class BaseEntity
     {
         [Key]

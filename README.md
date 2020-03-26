@@ -271,7 +271,7 @@ Site: https://www.nuget.org/
 
 
 
-- Criando e configurando o arquivo de classe "CotextFactory.cs", uma fabrica de contexto!
+- Criando e configurando o arquivo de classe "CotextFactory.cs", uma fabrica de contexto, cria bancos da dados e tabelas!
 
     1° Dentro da pasta Context cria uma classe chamada 'CotextFactory', depois implementa uma interface chamada  'IDesignTimeDbContextFactory< T>', tipando a interface com a classe "MyContext"
 
@@ -287,8 +287,7 @@ Site: https://www.nuget.org/
     public class ContextFactory : IDesignTimeDbContextFactory< MyContext>
     {
         public MyContext CreateDbContext(string[] args)
-        {
-            //Usando para criar a migrações
+        {            
             var connectionString = "Server=localhost;Port=3306;Database=dbAPI;Uid=root;Pwd=84190162";
 
             var optionsBuilder = new DbContextOptionsBuilder<MyContext>();

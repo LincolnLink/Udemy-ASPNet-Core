@@ -15,14 +15,14 @@ Desenvolvendo uma API com ajuda de um curso da Udemy
 
 cmd personalizado: https://cmder.net/
 
-# Lista de opções de projetos
+### Lista de opções de projetos
 
-`dotnet new`
+<blockquote>dotnet new</blockquote>
 
 
-# Comando para criar uma solution
+## Comando para criar uma solution
 
-`dotnet new sln --name CSharpBasico`
+<blockquote>dotnet new sln --name CSharpBasico</blockquote>
 
 
 # Criando um projeto em console com uma pasta 
@@ -173,13 +173,12 @@ Com essa configuração é possivel debugar a aplicação!! (#42)
 
 depois pode buildar usando `dotnet build`
 
-# Entidades
+# Criando e configurando uma Entidade!
 
-É uma representação da tabela de dados!
+Uma Entidade é ultilizada para representar uma tabela de dados, a entidade "BaseEntity" é a classe que tem as propriedades padrão,
+propriedades que toda entidade vai ter, ela foi criada separada pra que toda entidade herda ela!
 
-- Propriedades padrão de toda entidade: 
-
-````dir
+````
     public abstract class BaseEntity
     {
         [Key]
@@ -209,7 +208,7 @@ depois pode buildar usando `dotnet build`
 
 Site: https://www.nuget.org/
 
-- Instala no projeto Data! os 3 pacotes do Entity
+- Instala no projeto Data! os 3 pacotes do EntityFrameWorkCore version 2.2.6 
 
 `dotnet add package Microsoft.EntityFrameworkCore.Tools --version 2.2.6`
 
@@ -228,15 +227,22 @@ Site: https://www.nuget.org/
 
 - Criando as pastas da configuração!
 
-    Foi criada uma pasta "Context" e uma classe(MyContext), outra pasta chamada "Mapping", a ultima pasta chamada "Repository"
+    Foi criada uma pasta "Context",
+    Uma pasta chamada "Mapping",
+    E uma pasta chamada "Repository"
 
-    -- A classe "MyContext" herdada uma classe chamada 'DbContext', iniciado uma propriedade(prop) chamada 'User' do tipo generico DbSet<T>, aonde T recebe a entidade que deve ser mapeada!
+- Criando e configurando o arquivo da classe "MyContext.cs"
 
-`public DbSet<UserEntity> Users { get; set; }`
+1° A classe "MyContext" fica dentro da pasta "Context", ela herdada uma classe chamada 'DbContext',
+   Cria uma propriedade(prop) chamada 'User' do tipo generico DbSet<T>,
+   Aonde T recebe a entidade que deve ser mapeada!
 
-2° no método construtor, é passado pelo parametro chamado options do tipo generico DbContextOptions<T>, aonde T é a propria classe de contexto! 
+   `public DbSet<UserEntity> Users { get; set; }`
 
-`public MyContext(DbContextOptions<MyContext> options) : base(options){}`
+2° No método construtor da classe MyContext.cs, se passa um parametro chamado "options",
+   Do tipo generico DbContextOptions<T>, aonde T é a propria classe de contexto! 
+
+   `public MyContext(DbContextOptions<MyContext> options) : base(options){}`
 
 3° Foi feito um override da classe OnModelCreating(), aonde recebe o ModelBuilder como parametro!
 

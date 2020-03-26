@@ -250,13 +250,13 @@ Site: https://www.nuget.org/
 - Criando e configurando o arquivo da classe "MyContext.cs"
 
     1° A classe "MyContext" fica dentro da pasta "Context", ela herdada uma classe chamada 'DbContext',
-    cria uma propriedade(prop) chamada 'User' do tipo generico DbSet<T>,
+    cria uma propriedade(prop) chamada 'User' do tipo generico DbSet< T>,
     aonde T recebe a entidade que deve ser mapeada!
 
-    <blockquote>public DbSet<UserEntity> Users { get; set; }</blockquote>
+    <blockquote>public DbSet< UserEntity> Users { get; set; }</blockquote>
 
     2° No método construtor da classe MyContext.cs, se passa um parametro chamado "options",
-    do tipo generico DbContextOptions<T>, aonde T é a propria classe de contexto, criando uma configração de base!
+    do tipo generico DbContextOptions< T>, aonde T é a propria classe de contexto, criando uma configração de base!
 
     <blockquote>public MyContext(DbContextOptions< MyContext> options) : base(options){}</blockquote>
 
@@ -271,30 +271,32 @@ Site: https://www.nuget.org/
 
 
 
-- Criando e configurando o arquivo de classe "CotextFactory", uma fabrica de contexto!
+- Criando e configurando o arquivo de classe "CotextFactory.cs", uma fabrica de contexto!
 
-    Criando uma Conexão!
+    1° Dentro da pasta Context cria uma classe chamada 'CotextFactory', depois implementa uma interface chamada  'IDesignTimeDbContextFactory< T>', tipando a interface com a classe "MyContext"
 
-    1°Cria uma classe chamada 'CotextFactory', depois herda a classe 'IDesignTimeDbContextFactory<MyContext>' faz a referencia que pedir, e implementa a interface
+    2° No método do contrato cria uma variavel(connectionString) para receber a sua connectionString!
+    e outra variavel(optionsBuilder) para receber uma instancia de DbContextOptionsBuilder< T>(), tipando com MyContext;
 
-    2° No método do contrato cria uma variavel para receber a sua connectionString!
+    3° Com o a variavel(optionsBuilder), use o método optionsBuilder.UseMySql(connectionString), 
+    passando o "connectionString" como parametro!
 
-    e outra variavel para receber uma instancia de DbContextOptionsBuilder<MyContext>();
-    3° Use o método 'UserMySql' para fazer uma Conexão!
-
-    4° Retorne uma instancia do MyContext, recebendo o Options como parametro!
+    4° Retorne uma instancia do MyContext, recebendo o "optionsBuilder.Options" como parametro!
 
     <blockquote>
-    public MyContext CreateDbContext(string[] args)
+    public class ContextFactory : IDesignTimeDbContextFactory< MyContext>
     {
-        //Usando para criar a migrações
-        var connectionString = "Server=localhost;Port=3306;Database=dbAPI;Uid=root;Pwd=''";
+        public MyContext CreateDbContext(string[] args)
+        {
+            //Usando para criar a migrações
+            var connectionString = "Server=localhost;Port=3306;Database=dbAPI;Uid=root;Pwd=84190162";
 
-        var optionsBuilder = new DbContextOptionsBuilder<MyContext>();
+            var optionsBuilder = new DbContextOptionsBuilder<MyContext>();
 
-        optionsBuilder.UseMySql(connectionString);
-
-        return new MyContext(optionsBuilder.Options);
+            optionsBuilder.UseMySql(connectionString);
+            
+            return new MyContext(optionsBuilder.Options);
+        }
     }
     </blockquote>
 

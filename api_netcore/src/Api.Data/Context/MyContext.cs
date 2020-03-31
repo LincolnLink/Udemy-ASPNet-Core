@@ -17,6 +17,7 @@ namespace Api.Data.Context
         {
             base.OnModelCreating(modelBuilder);
 
+            //Depois de criar o mapeamento, chama o método que faz a configuração!
             modelBuilder.Entity<UserEntity>(new UserMap().Configure);
 
         }

@@ -14,7 +14,7 @@ namespace Api.Data.Mapping
             //Definindo a chave primaria
             builder.HasKey(p => p.Id);
 
-            //Definindo como campo unico
+            //Criando um Index e Definindo como campo unico
             builder.HasIndex(p => p.Email)
                    .IsUnique();
 

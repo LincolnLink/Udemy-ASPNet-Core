@@ -271,7 +271,7 @@ Site: https://www.nuget.org/
 
 
 
-- Criando e configurando o arquivo de classe "CotextFactory.cs", uma fabrica de contexto, cria bancos da dados e tabelas!
+- Criando e configurando o arquivo de classe "CotextFactory.cs", prove uma conexao com o banco de dados!
 
     1° Dentro da pasta Context cria uma classe chamada 'CotextFactory', depois implementa uma interface chamada  'IDesignTimeDbContextFactory< T>', tipando a interface com a classe "MyContext"
 
@@ -283,38 +283,35 @@ Site: https://www.nuget.org/
 
     4° Retorne uma instancia do MyContext, recebendo o "optionsBuilder.Options" como parametro!
 
+    Com isso você consegue criar as migrações!
+
     <blockquote>
     public class ContextFactory : IDesignTimeDbContextFactory< MyContext>
-    { 
-        &nbsp;
+    {         
         public MyContext CreateDbContext(string[] args)
-        {  
-            &nbsp;          
-            var connectionString = "Server=localhost;Port=3306;Database=dbAPI;Uid=root;Pwd=84190162";
-
+        {          
+            //Usando para criar a migrações              
+            var connectionString = "Server=localhost;Port=3306;Database=dbAPI;Uid=root;Pwd=root123";
             var optionsBuilder = new DbContextOptionsBuilder< MyContext>();
-
-            optionsBuilder.UseMySql(connectionString);        
-
+            optionsBuilder.UseMySql(connectionString);
             return new MyContext(optionsBuilder.Options);
         }
     }
     </blockquote>
 
-Com isso você consegue criar as migrações!
-
-<blockquote> Mapeando a classe para o EF</blockquote> 
-
-Cria uma classe com nome de UserMap, na pasta Mapping, implementa a interface generica do tipo da classe da sua Domain!
-
-` IEntityTypeConfiguration<UserEntity> `
-
-Bota as referencias, e implementa a interface, assim aparece um método para você criar regras para a tabela do banco e suas propriedades!
 
 
 
-`public void Configure(EntityTypeBuilder<UserEntity> builder){
+- Criando Mapeamento das classes no EF
 
+    Cria uma classe com nome de "UserMap", "User" é o nome da tabela, na pasta Mapping, implementa a interface generica do tipo da classe da sua Domain!
+
+    <blockquote> IEntityTypeConfiguration< UserEntity> </blockquote>
+
+    Bota as referencias, e implementa a interface, assim aparece um método para você criar regras para a tabela do banco e suas propriedades!
+
+    <blockquote>
+    public void Configure(EntityTypeBuilder< UserEntity> builder){
 
             //Definindo o nome da tabela
             builder.ToTable("User");
@@ -322,11 +319,12 @@ Bota as referencias, e implementa a interface, assim aparece um método para voc
             //Definindo a chave primaria            
             builder.HasKey(p => p.Id);
 
-            //Definindo como campo unico
+            //Criando um Index e Definindo como campo unico
             builder.HasIndex(p => p.Email)
                    .IsUnique();
 
-            //Definindo como requirido e um tamanho maximo
+            //Criando uma propriedade
+            //E definindo como obrigatorio e um tamanho maximo
             builder.Property(u => u.Name)
                    .IsRequired()
                    .HasMaxLength(60);
@@ -334,218 +332,169 @@ Bota as referencias, e implementa a interface, assim aparece um método para voc
             //Definindo um tamanho maximo
             builder.Property(u => u.Email)
                    .HasMaxLength(100);
+    }
+    </blockquote>
 
-        }
-`
+    Configura o mapeamento no context
 
-Configura o mapeamento no context
-
-`
+    <blockquote>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
-
             base.OnModelCreating(modelBuilder);
 
+            //Depois de criar o mapeamento, chama o método que faz a configuração!                        
             modelBuilder.Entity<UserEntity>(new UserMap().Configure);
         }
-`
+    </blockquote>
 
-<blockquote> Configurando a migração! </blockquote> 
 
-No prompt comando entra na pasta Api.Data, o unico projeto que tem o EF, para digitar o comando:
+- Configurando a migração!
 
-` dotnet ef --help` esse comando informa os comandos principais do EF! 
+    No prompt comando entra na pasta Api.Data, o unico projeto que tem o EF, para digitar o comando:
 
-Adicionando na migração!
+    <blockquote> dotnet ef --help</blockquote> esse comando informa os comandos principais do EF! 
 
-`dotnet ef migrations add UserMigration`
+    Adicionando na migração!
 
-Monstrando qual banco deve user
+    <blockquote>dotnet ef migrations add UserMigration</blockquote>
 
-`dotnet ef database update`
+    Monstrando qual banco deve user
 
-<blockquote> Criando o Repositorio </blockquote> 
+    <blockquote>dotnet ef database update</blockquote>
 
+# Criando o Repositorio
 
 - Método insert do formato async!
 
-`
-public async Task<T> InsertAsync(T item)
+    <blockquote>
+    public async Task<T> InsertAsync(T item)
+    {
+        try
+        {
+            //Caso o ID esteja vasio, é criado um id
+            if (item.Id == Guid.Empty)
+            {
+                item.Id = Guid.NewGuid();
+            }
+
+            //Salva a data da criação
+            item.CreateAt = DateTime.UtcNow;
+            _dataset.Add(item);
+
+            //o termo await faz parte do método async, salva o objeto usnado o contexto
+            await _context.SaveChangesAsync();
+        }
+        catch (Exception ex)
         {
 
-
-            try
-            {
-
-                //Caso o ID esteja vasio, é criado um id
-                if (item.Id == Guid.Empty)
-                {
-
-                    item.Id = Guid.NewGuid();
-
-                }
-
-
-                //Salva a data da criação
-                item.CreateAt = DateTime.UtcNow;
-                _dataset.Add(item);
-
-                //o termo await faz parte do método async, salva o objeto usnado o contexto
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-
-            return item;
+            throw ex;
         }
 
-`
+        return item;
+    }
+    </blockquote>
 
 - Método update do formato async!
 
-`
-public async Task<T> UpdateAsync(T item)
-{
-
-
-    try
+<blockquote>
+    public async Task<T> UpdateAsync(T item)
     {
-
-    //Procura o objeto no banco!
-
-    var result = await _dataset.SingleOrDefaultAsync(p => p.Id.Equals(item.Id));
-
-        if (result == null)
+        try
         {
-            return null;
+            //Procura o objeto no banco!
+            var result = await _dataset.SingleOrDefaultAsync(p => p.Id.Equals(item.Id));
+
+            if (result == null)
+            {
+                return null;
+            }
+
+            //Caso ele exista informa a data de modificação e reforça a de criação!
+            item.UpdateAt = DateTime.UtcNow;
+
+            item.CreateAt = result.CreateAt;
+
+            //Atualiza as informações novas e salva no banco!
+
+            _context.Entry(result).CurrentValues.SetValues(item);
+
+            //ele faz o commit ou o roolback
+
+            await _context.SaveChangesAsync();
         }
 
-
-        //Caso ele exista informa a data de modificação e reforça a de criação!
-        item.UpdateAt = DateTime.UtcNow;
-
-
-        item.CreateAt = result.CreateAt;
-
-
-        //Atualiza as informações novas e salva no banco!
-
-
-        _context.Entry(result).CurrentValues.SetValues(item);
-
-
-        //ele faz o commit ou o roolback
-
-
-        await _context.SaveChangesAsync();
-
-
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+        //retorna o que foi atualizado
+        return item;
     }
-
-    catch (Exception ex)
-    {
-
-
-        throw ex;
-
-
-    }
-
-
-    //retorna o que foi atualizado
-    return item;
-
-
-}
-
-
-`
+</blockquote>
 
 
 - Método deletar do formato async!
 
-`public async Task<bool> DeleteAsync(Guid id)
-
+    <blockquote>
+    public async Task<bool> DeleteAsync(Guid id)
+    {
+        try
         {
+            //Procura o objeto no banco!
 
-            try
+            var result = await _dataset.SingleOrDefaultAsync(p => p.Id.Equals(id));
+
+            if (result == null)
             {
-
-                //Procura o objeto no banco!
-
-                var result = await _dataset.SingleOrDefaultAsync(p => p.Id.Equals(id));
-
-                if (result == null)
-                {
-
-                    return false;
-
-
-                }
-
-                _dataset.Remove(result);
-
-
-                await _context.SaveChangesAsync();
-
-
-                return true;
-
-
+                return false;
             }
 
+            _dataset.Remove(result);
 
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            await _context.SaveChangesAsync();
 
-
-        }`
+            return true;
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+    </blockquote>
 
 - Método async que seleciona todos ou um unico objeto!
 
-`
-
-public async Task<IEnumerable<T>> SelectAcync()
-{
-
-            try
-            {
-
-                return await _dataset.ToListAsync();
-
-            }
-            catch (Exception ex)
-            {
-
-
-                throw ex;
-
-            }
-}
-`
-
-
-´
-public async Task<T> SelectAsync(Guid id)
-{    
-    try
-    {
-        return await _dataset.SingleOrDefaultAsync(p => p.Id.Equals(id));
-    }
-    catch (Exception ex)
+    <blockquote>
+    public async Task<IEnumerable<T>> SelectAcync()
     {
 
-        throw ex;
+        try
+        {
+            return await _dataset.ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
     }
-}
+    </blockquote>
 
-´
+- Método async que seleciona um objeto pelo ID
+
+    <blockquote>
+    public async Task<T> SelectAsync(Guid id)
+    {    
+        try
+        {
+            return await _dataset.SingleOrDefaultAsync(p => p.Id.Equals(id));
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+    <blockquote>
+
 
 # Api.Service
 

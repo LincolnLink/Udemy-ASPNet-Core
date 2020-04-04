@@ -396,17 +396,21 @@ Site: https://www.nuget.org/
 
 - No Projeto Api.Domain cria um arquivo de Interface chamado "IRepository", que tenha um tipo generico < T> , Aonde T tenha herança de BaseEntity, criad o CRUD generico, todo os métodos é tratado com o retorno Task< T> para informar que o método é Async!
 
-
-
     <blockquote>
+
     public interface IRepository<T> where T : BaseEntity
     {
         Task<T> InsertAsync(T item);
+
         Task<T> UpdateAsync(T item);
+
         Task<bool> DeleteAsync(Guid id);
+
         Task<T> SelectAsync(Guid id);
+
         Task<IEnumerable<T>> SelectAcync();
     }
+
     </blockquote>
 
 - Método insert do formato async!

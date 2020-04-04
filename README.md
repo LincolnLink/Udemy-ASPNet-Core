@@ -408,6 +408,7 @@ Site: https://www.nuget.org/
 
     public interface IRepository<T> where T : BaseEntity
     {
+
         Task<T> InsertAsync(T item);
 
         Task<T> UpdateAsync(T item);
@@ -417,6 +418,7 @@ Site: https://www.nuget.org/
         Task<T> SelectAsync(Guid id);
 
         Task<IEnumerable<T>> SelectAcync();
+        
     }
 
     </blockquote>
@@ -455,7 +457,7 @@ Site: https://www.nuget.org/
         return item;
 
     }
-    
+
     </blockquote>
 
 - Método update do formato async!

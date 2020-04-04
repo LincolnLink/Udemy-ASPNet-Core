@@ -291,18 +291,26 @@ Site: https://www.nuget.org/
 
     Com isso você consegue criar as migrações!
 
-    <blockquote>
+    <blockquote>    
     public class ContextFactory : IDesignTimeDbContextFactory< MyContext>
-    {         
+    {     
+
         public MyContext CreateDbContext(string[] args)
-        {          
+        {         
+
             //Usando para criar a migrações              
             var connectionString = "Server=localhost;Port=3306;Database=dbAPI;Uid=root;Pwd=root123";
+
             var optionsBuilder = new DbContextOptionsBuilder< MyContext>();
+
             optionsBuilder.UseMySql(connectionString);
+
             return new MyContext(optionsBuilder.Options);
+
         }
+
     }
+
     </blockquote>
 
 
@@ -418,25 +426,36 @@ Site: https://www.nuget.org/
     <blockquote>
     public async Task< T> InsertAsync(T item)
     {
+
         try
         {
+
             //Caso o ID esteja vasio, é criado um id
             if (item.Id == Guid.Empty)
             {
                 item.Id = Guid.NewGuid();
             }
+
             //Salva a data da criação
             item.CreateAt = DateTime.UtcNow;
+
             _dataset.Add(item);
+
             //o termo await faz parte do método async, salva o objeto usnado o contexto
             await _context.SaveChangesAsync();
+
         }
         catch (Exception ex)
         {
+
             throw ex;
+
         }
+
         return item;
+
     }
+    
     </blockquote>
 
 - Método update do formato async!

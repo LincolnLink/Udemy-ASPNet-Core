@@ -223,6 +223,12 @@ Site: https://www.nuget.org/
 
 - Instala no projeto "Data", os 3 pacotes do EntityFrameWorkCore version 2.2.6 
 
+    O ef não faz mais parte do dotnet core, depois da versão 3, devemos instalar o dotnet-ef de forma global!
+
+    <blockquote>dotnet tool install --global dotnet-ef --version 3.0.0</blockquote>
+
+    Pacotes:
+
     <blockquote>dotnet add package Microsoft.EntityFrameworkCore.Tools --version 2.2.6</blockquote>
 
     <blockquote>dotnet add package Microsoft.EntityFrameworkCore.Design --version 2.2.6</blockquote>
@@ -354,20 +360,59 @@ Site: https://www.nuget.org/
 
     <blockquote> dotnet ef --help</blockquote> esse comando informa os comandos principais do EF! 
 
-    Adicionando na migração!
+    Adicionando uma configuração na migração!
 
     <blockquote>dotnet ef migrations add UserMigration</blockquote>
 
-    Monstrando qual banco deve user
+    - -UserMigration nome da migração, pode ser chamado de "First_Migration" caso seja a primeira!
 
+    No arquivo "ContextFactory" você alem de por a senha e usuario do servidor MySql, define o banco da migração, caso seja a primeira migração, cria um nome para o seu banco de dados!
+
+    Comando que atualiza a migração!
+
+    <blockquote>dotnet ef database update</blockquote>
+
+# Como atualizar uma tabela
+
+- Com a tabela criada e com a primeira migração já feita!
+
+    1° Devemos criar uma nova propriedade ou remover da entidade e por final executar o comando que atualiza a migração, porem coso queira uma nova tabela, cria uma nova entidade!
+
+    2° No arquivo "MyContext" cria uma propriedade do tipo DbSet<T>, o T você troca pela entidade da nova tebela, caso queira criar uma nova tabela!
+
+    <blockquote> public DbSet< NovaEntidade> Users { get; set; }</blockquote>
+
+    3° Na pasta Mapping cria um novo arquivo de mapeamento, caso tenha criado uma nova tabela
+
+    4° No arquivo "MyContext", dentro do método "OnModelCreating" chama a nova configuração de mapeamento, caso tenha criado uma nova tabela!
+
+    <blockquote> modelBuilder.Entity< NovaEntidade>(new UserMap().Configure);</blockquote>
+
+    5° Executa o comando para atualizar a migração!
+    
     <blockquote>dotnet ef database update</blockquote>
 
 # Criando o Repositorio
 
+- No Projeto Api.Domain cria um arquivo de Interface chamado "IRepository", que tenha um tipo generico < T> , Aonde T tenha herança de BaseEntity, criad o CRUD generico, todo os métodos é tratado com o retorno Task< T> para informar que o método é Async!
+
+
+
+    <blockquote>
+    public interface IRepository<T> where T : BaseEntity
+    {
+        Task<T> InsertAsync(T item);
+        Task<T> UpdateAsync(T item);
+        Task<bool> DeleteAsync(Guid id);
+        Task<T> SelectAsync(Guid id);
+        Task<IEnumerable<T>> SelectAcync();
+    }
+    </blockquote>
+
 - Método insert do formato async!
 
     <blockquote>
-    public async Task<T> InsertAsync(T item)
+    public async Task< T> InsertAsync(T item)
     {
         try
         {
@@ -376,53 +421,41 @@ Site: https://www.nuget.org/
             {
                 item.Id = Guid.NewGuid();
             }
-
             //Salva a data da criação
             item.CreateAt = DateTime.UtcNow;
             _dataset.Add(item);
-
             //o termo await faz parte do método async, salva o objeto usnado o contexto
             await _context.SaveChangesAsync();
         }
         catch (Exception ex)
         {
-
             throw ex;
         }
-
         return item;
     }
     </blockquote>
 
 - Método update do formato async!
 
-<blockquote>
-    public async Task<T> UpdateAsync(T item)
+    <blockquote>
+    public async Task< T> UpdateAsync(T item)
     {
         try
         {
             //Procura o objeto no banco!
-            var result = await _dataset.SingleOrDefaultAsync(p => p.Id.Equals(item.Id));
-
+            var result = await _dataset.SingleOrDefaultAsync(p => p.Id.Equals(item.Id));            
             if (result == null)
             {
                 return null;
             }
-
             //Caso ele exista informa a data de modificação e reforça a de criação!
             item.UpdateAt = DateTime.UtcNow;
-
             item.CreateAt = result.CreateAt;
-
             //Atualiza as informações novas e salva no banco!
-
             _context.Entry(result).CurrentValues.SetValues(item);
-
             //ele faz o commit ou o roolback
-
             await _context.SaveChangesAsync();
         }
-
         catch (Exception ex)
         {
             throw ex;
@@ -430,29 +463,23 @@ Site: https://www.nuget.org/
         //retorna o que foi atualizado
         return item;
     }
-</blockquote>
-
+    </blockquote>
 
 - Método deletar do formato async!
 
     <blockquote>
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task< bool> DeleteAsync(Guid id)
     {
         try
         {
             //Procura o objeto no banco!
-
             var result = await _dataset.SingleOrDefaultAsync(p => p.Id.Equals(id));
-
             if (result == null)
             {
                 return false;
             }
-
             _dataset.Remove(result);
-
             await _context.SaveChangesAsync();
-
             return true;
         }
         catch (Exception ex)
@@ -462,12 +489,11 @@ Site: https://www.nuget.org/
     }
     </blockquote>
 
-- Método async que seleciona todos ou um unico objeto!
+- Método que seleciona todos de forma async!
 
     <blockquote>
-    public async Task<IEnumerable<T>> SelectAcync()
+    public async Task< IEnumerable< T>> SelectAcync()
     {
-
         try
         {
             return await _dataset.ToListAsync();
@@ -482,7 +508,7 @@ Site: https://www.nuget.org/
 - Método async que seleciona um objeto pelo ID
 
     <blockquote>
-    public async Task<T> SelectAsync(Guid id)
+    public async Task< T> SelectAsync(Guid id)
     {    
         try
         {
@@ -496,9 +522,8 @@ Site: https://www.nuget.org/
     <blockquote>
 
 
+
 # Api.Service
-
-
 
 <blockquote> Implementando o Service </blockquote> 
 

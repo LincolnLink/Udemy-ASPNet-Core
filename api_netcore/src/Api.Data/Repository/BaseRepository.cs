@@ -12,9 +12,7 @@ namespace Api.Data.Repository
     {
         protected readonly MyContext _context;
 
-
         private DbSet<T> _dataset;
-
 
         /// <summary>
         /// Método construtor que recebe uma injeção de dependencia, com a classe que faz 

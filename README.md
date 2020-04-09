@@ -400,7 +400,7 @@ Site: https://www.nuget.org/
     
     <blockquote>dotnet ef database update</blockquote>
 
-# Criando o Repositorio
+# Criando o Repositorio (#56)
 
 - No Projeto Api.Domain cria um arquivo de Interface chamado "IRepository", que tenha um tipo generico < T> , Aonde T tenha herança de BaseEntity, criad o CRUD generico, todo os métodos é tratado com o retorno Task< T> para informar que o método é Async!
 
@@ -422,6 +422,12 @@ Site: https://www.nuget.org/
     }
 
     </blockquote>
+
+/TODO
+
+- Implementando a Interface em uma classe base generica!
+
+    A interface é a penas um contrato aonde tem 
 
 - Método insert do formato async!
 

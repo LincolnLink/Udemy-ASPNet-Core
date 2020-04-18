@@ -431,10 +431,12 @@ Site: https://www.nuget.org/
     Na pasta de "Repository" que fica no projeto Api.Data, cria um classe chamada "BaseRepository"!
 
     Esta classe vai servir para implementar a interface "IRepository", vai aparecer varios métodos da interface "IRepository" para poder criar o conteudo do corpo de cada uma das classes, porem antes disso deve criar o contrutor da classe(ctor + 2xTAB), com isso você faz uma injeção de dependencia da classe "MyContext" passando um parametro na classe contrutora com o tipo "MyContext", essa classe faz conexão com o banco!
+
     Cria uma variavel chamada "_context" para atribuir o parametro do tipo "MyContext"
+
     Cria uma variavel chamada "_dataset" para atribuir _context.Set< T>();
 
-    </blockquote>
+    <blockquote>
 
     protected readonly MyContext _context;
 
@@ -442,8 +444,11 @@ Site: https://www.nuget.org/
 
     public BaseRepository(MyContext context)
     {
+
         _context = context;
+
         _dataset = _context.Set< T>();
+
     }
 
     </blockquote>

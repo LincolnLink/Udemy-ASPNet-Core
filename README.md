@@ -533,222 +533,285 @@ Site: https://www.nuget.org/
         return item;
 
     }
-    
+
     </blockquote>
 
 - Método deletar do formato async!
 
     <blockquote>
+
     public async Task< bool> DeleteAsync(Guid id)
+
     {
+
         try
         {
+
             //Procura o objeto no banco!
             var result = await _dataset.SingleOrDefaultAsync(p => p.Id.Equals(id));
+
             if (result == null)
             {
                 return false;
             }
+
             _dataset.Remove(result);
             await _context.SaveChangesAsync();
             return true;
         }
         catch (Exception ex)
         {
+
             throw ex;
+
         }
+
     }
+
     </blockquote>
 
 - Método que seleciona todos de forma async!
 
     <blockquote>
+
     public async Task< IEnumerable< T>> SelectAcync()
+
     {
+
         try
         {
+
             return await _dataset.ToListAsync();
+
         }
         catch (Exception ex)
         {
+
             throw ex;
+
         }
+
     }
+
     </blockquote>
 
 - Método async que seleciona um objeto pelo ID
 
     <blockquote>
+
     public async Task< T> SelectAsync(Guid id)
     {    
+
         try
         {
+
             return await _dataset.SingleOrDefaultAsync(p => p.Id.Equals(id));
+
         }
         catch (Exception ex)
         {
+
             throw ex;
+
         }
+
     }
+
     <blockquote>
 
+- Método async que verifica se tem 
+
+    <blockquote>
+
+    public async Task<bool> ExistAsync(Guid id)
+    {
+
+        return await _dataset.AnyAsync(p => p.Id.Equals(id));
+        
+    }
+
+    </blockquote>
 
 
-# Api.Service
-
-<blockquote> Implementando o Service </blockquote> 
+# Implementando o Service (Api.Service)
 
 
 - 1° cria uma interface no projeto de Domain, com os contratos!
 
-`
+    <blockquote>
 
+    namespace Api.Domain.Interfaces.Services.User
 
-namespace Api.Domain.Interfaces.Services.User
-{
-
-    public interface IUserService
     {
 
-        Task<UserEntity> Get(Guid id);
+        public interface IUserService
 
-        Task<IEnumerable<UserEntity>> GetAll();
+        {
 
-        Task<UserEntity> Post(UserEntity user);
+            Task<UserEntity> Get(Guid id);
 
-        Task<UserEntity> Put(UserEntity user);
+            Task<IEnumerable<UserEntity>> GetAll();
 
-        Task<bool> Delete(Guid id);
+            Task<UserEntity> Post(UserEntity user);
+
+            Task<UserEntity> Put(UserEntity user);
+
+            Task<bool> Delete(Guid id);
+        }
+
     }
-}`
+
+    </blockquote> 
 
 
 
 - 2° Cria referencias para a Service!
 
-`dotnet add .\Api.Service\ reference .\Api.Domain\`
+    <blockquote>dotnet add .\Api.Service\ reference .\Api.Domain\</blockquote> 
 
-`dotnet add .\Api.Service\ reference .\Api.Data\`
+    <blockquote> dotnet add .\Api.Service\ reference .\Api.Data\</blockquote> 
 
-`dotnet add .\Api.Service\ reference .\Api.CrossCutting\`
+     
 
 - 3° A implementação
 
-Cria uma pasta chamada Service, e dentro dela uma classe chamada "UserService", implementa a interface UserService, passa as referencias para tirar os erros, e implementa a interface para poder exibir os métodos do contrato!
+    Cria uma pasta chamada Service, e dentro dela uma classe chamada "UserService", implementa a interface UserService, passa as referencias para tirar os erros, e implementa a interface para poder exibir os métodos do contrato!
 
 
-`
+    <blockquote>
 
-
-
-namespace Api.Service.Services
-{
-    public class UserService : IUserService
+    namespace Api.Service.Services
     {
 
-        private IRepository<UserEntity> _repository;
-
-        public UserService(IRepository<UserEntity> repository)
+        public class UserService : IUserService
         {
-            _repository = repository;
+
+            private IRepository<UserEntity> _repository;
+
+            public UserService(IRepository<UserEntity> repository)
+            {
+
+                _repository = repository;
+
+            }
+
+            public async Task<bool> Delete(Guid id)
+            {
+
+                return await _repository.DeleteAsync(id);
+
+            }
+
+            public async Task<UserEntity> Get(Guid id)
+            {
+
+                return await _repository.SelectAsync(id);
+
+            }
+
+            public async Task<IEnumerable<UserEntity>> GetAll()
+            {
+
+                return await _repository.SelectAcync();
+
+            }
+
+            public async Task<UserEntity> Post(UserEntity user)
+            {
+
+                return await _repository.InsertAsync(user);
+
+            }
+
+            public async Task<UserEntity> Put(UserEntity user)
+            {
+
+                return await _repository.UpdateAsync(user);
+
+            }
+
         }
 
-        public async Task<bool> Delete(Guid id)
-        {
-            return await _repository.DeleteAsync(id);
-        }
-
-        public async Task<UserEntity> Get(Guid id)
-        {
-            return await _repository.SelectAsync(id);
-        }
-
-        public async Task<IEnumerable<UserEntity>> GetAll()
-        {
-            return await _repository.SelectAcync();
-        }
-
-        public async Task<UserEntity> Post(UserEntity user)
-        {
-            return await _repository.InsertAsync(user);
-        }
-
-        public async Task<UserEntity> Put(UserEntity user)
-        {
-            return await _repository.UpdateAsync(user);
-        }
     }
-}
+
+    <blockquote>
 
 
-`
-
-
-Em cada método desse é possivel por as regras de negocio, o projeto de Api.Service serve para ser um intermediario do projeto Api.Aplicação para a Api.Infra/Data ! 
-OBS: não se deve por validação! 
+    Em cada método desse é possivel por as regras de negocio, o projeto de Api.Service serve para ser um intermediario do projeto Api.Aplicação para a Api.Infra/Data ! 
+    OBS: não se deve por validação! 
 
 
 
 # Tratando o projeto Api.Aplication
 
 
-<blockquote> Criando a classe de controle! </blockquote> 
+- Criando a classe de controle!    
 
-- Adicione algumas referencias !!
+    Adicione algumas referencias no projeto Api.Aplication !!
 
-`dotnet add Api.Application reference Api.Domain`
+    <blockquote>dotnet add Api.Application reference Api.Domain</blockquote>
 
-`dotnet add Api.Application reference Api.Service`
+    <blockquote>dotnet add Api.Application reference Api.Service</blockquote>
 
-`dotnet add Api.Application reference Api.CrossCutting`
+    <blockquote>dotnet add Api.Application reference Api.CrossCutting</blockquote>
 
+    Cria uma classe com nome de "UsersController"
 
-- Cria uma classe com nome de "UsersController"
+    Criando o GetAll com tratamento
 
+    <blockquote>
 
-Criando o GetAll com tratamento
+        [ HttpGet]
 
-`
+        //faz referencia do service
 
-
-[HttpGet]
-        public async Task<ActionResult> GetAll([FromServices] IUserService service) //faz referencia do service
+        public async Task< ActionResult> GetAll([FromServices] IUserService service) 
+               
         {
+
             //Verifica se a informação que está vindo da rota é valida!
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState); //400 bad request - solicitação invalida!
+
+                //400 bad request - solicitação invalida!
+                return BadRequest(ModelState); 
+
             }
 
             try
             {
+
                 return Ok(await service.GetAll());
+
             }
             catch (ArgumentException e) //trata erros de controller!
             {
+
                 //Resposta para o navegador! - erro 500
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+                
             }
 
         }
 
-`
-vai da erro precisa tratar a injeção de dependencia e o projeto CrossCutting
+    <blockquote>
+
+    vai da erro precisa tratar a injeção de dependencia e o projeto CrossCutting
 
 
-- Adiciona mais ferefencia
+- Adiciona mais ferefencia no projeto Api.CrossCutting
 
-`dotnet add .\Api.CrossCutting\ reference .\Api.Domain\`
+    <blockquote>dotnet add .\Api.CrossCutting\ reference .\Api.Domain\</blockquote>
 
-`dotnet add .\Api.CrossCutting\ reference .\Api.Service\`
+    <blockquote>dotnet add .\Api.CrossCutting\ reference .\Api.Service\</blockquote>
 
-`dotnet add .\Api.CrossCutting\ reference .\Api.Data\`
+    <blockquote>dotnet add .\Api.CrossCutting\ reference .\Api.Data\</blockquote>
 
-Vai aparecer outro erro de , referencia circular , para re solver re mova a referencia CrossCutting do projeto de service
+    Vai aparecer outro erro de , referencia circular , para re solver re mova a referencia CrossCutting do projeto de service
 
 - instala o AutoMaper
 
-`dotnet add package AutoMapper.Extensions.Microsoft.DependencyInjection --version 7.0.0`
+    <blockquote>dotnet add package AutoMapper.Extensions.Microsoft.DependencyInjection --version 7.0.0</blockquote>
 
 
 

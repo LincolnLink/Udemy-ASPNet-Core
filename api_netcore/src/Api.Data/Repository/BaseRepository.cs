@@ -25,34 +25,6 @@ namespace Api.Data.Repository
             _dataset = _context.Set<T>();
         }
 
-
-        /// <summary>
-        /// Método async para deletar
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public async Task<bool> DeleteAsync(Guid id)
-        {
-            try
-            {
-                //Procura o objeto no banco!
-                var result = await _dataset.SingleOrDefaultAsync(p => p.Id == id);
-                if (result == null)
-                {
-                    return false;
-                }
-
-                _dataset.Remove(result);
-                await _context.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-
         /// <summary>
         /// Método asyncrone que insere um novo objeto!
         /// </summary>
@@ -85,6 +57,72 @@ namespace Api.Data.Repository
             return item;
         }
 
+
+        /// <summary>
+        /// Método async para atualizar o objeto
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public async Task<T> UpdateAsync(T item)
+        {
+            try
+            {
+                //Procura o objeto no banco!
+                var result = await _dataset.SingleOrDefaultAsync(p => p.Id.Equals(item.Id));
+
+                if (result == null)
+                {
+                    return null;
+                }
+
+                //Caso ele exista informa a data de modificação e reforça a de criação!
+                item.UpdateAt = DateTime.UtcNow;
+                item.CreateAt = result.CreateAt;
+
+                //Atualiza as informações novas e salva no banco!
+                _context.Entry(result).CurrentValues.SetValues(item);
+
+                //ele faz o commit ou o roolback
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            //retorna o que foi atualizado
+            return item;
+        }
+
+
+        /// <summary>
+        /// Método async para deletar
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<bool> DeleteAsync(Guid id)
+        {
+            try
+            {
+                //Procura o objeto no banco!
+                var result = await _dataset.SingleOrDefaultAsync(p => p.Id == id);
+                if (result == null)
+                {
+                    return false;
+                }
+
+                _dataset.Remove(result);
+
+                await _context.SaveChangesAsync();
+                
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+     
 
         /// <summary>
         /// Método async para buscar todos os registros
@@ -123,40 +161,10 @@ namespace Api.Data.Repository
         }
 
 
-        /// <summary>
-        /// Método async para atualizar o objeto
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        public async Task<T> UpdateAsync(T item)
+        public async Task<bool> ExistAsync(Guid id)
         {
-            try
-            {
-                //Procura o objeto no banco!
-                var result = await _dataset.SingleOrDefaultAsync(p => p.Id.Equals(item.Id));
-                
-                if (result == null)
-                {
-                    return null;
-                }
-
-                //Caso ele exista informa a data de modificação e reforça a de criação!
-                item.UpdateAt = DateTime.UtcNow;
-                item.CreateAt = result.CreateAt;
-
-                //Atualiza as informações novas e salva no banco!
-                _context.Entry(result).CurrentValues.SetValues(item);
-
-                //ele faz o commit ou o roolback
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-            //retorna o que foi atualizado
-            return item;
+            return await _dataset.AnyAsync(p => p.Id.Equals(id));
         }
+       
     }
 }

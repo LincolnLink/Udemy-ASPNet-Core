@@ -457,7 +457,9 @@ Site: https://www.nuget.org/
 - Método insert do formato async!
 
     <blockquote>
+
     public async Task< T> InsertAsync(T item)
+
     {
 
         try
@@ -474,7 +476,7 @@ Site: https://www.nuget.org/
 
             _dataset.Add(item);
 
-            //o termo await faz parte do método async, salva o objeto usnado o contexto
+            //o termo await faz parte do método async, salva o objeto usando o contexto
             await _context.SaveChangesAsync();
 
         }
@@ -494,31 +496,44 @@ Site: https://www.nuget.org/
 - Método update do formato async!
 
     <blockquote>
+
     public async Task< T> UpdateAsync(T item)
+
     {
+
         try
         {
+
             //Procura o objeto no banco!
-            var result = await _dataset.SingleOrDefaultAsync(p => p.Id.Equals(item.Id));            
+            var result = await _dataset.SingleOrDefaultAsync(p => p.Id.Equals(item.Id));
+
             if (result == null)
             {
                 return null;
             }
+
             //Caso ele exista informa a data de modificação e reforça a de criação!
             item.UpdateAt = DateTime.UtcNow;
             item.CreateAt = result.CreateAt;
+
             //Atualiza as informações novas e salva no banco!
             _context.Entry(result).CurrentValues.SetValues(item);
+
             //ele faz o commit ou o roolback
             await _context.SaveChangesAsync();
+
         }
         catch (Exception ex)
         {
+
             throw ex;
         }
+
         //retorna o que foi atualizado
         return item;
+
     }
+    
     </blockquote>
 
 - Método deletar do formato async!

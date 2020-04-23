@@ -72,7 +72,7 @@ namespace Api.Data.Repository
                 item.CreateAt = DateTime.UtcNow;
                 _dataset.Add(item);
 
-                //o termo await faz parte do método async, salva o objeto usnado o contexto
+                //o termo await faz parte do método async, salva o objeto usando o contexto
                 await _context.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -134,6 +134,7 @@ namespace Api.Data.Repository
             {
                 //Procura o objeto no banco!
                 var result = await _dataset.SingleOrDefaultAsync(p => p.Id.Equals(item.Id));
+                
                 if (result == null)
                 {
                     return null;

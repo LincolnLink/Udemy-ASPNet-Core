@@ -752,7 +752,35 @@ Site: https://www.nuget.org/
 
 - 2° Cria uma classe com nome de "UsersController"
 
-    Criando o GetAll com tratamento
+    Toda classe de controller deve herdar a classe ControllerBase, para ser reconhecida como um controle!
+    No método construtor bota um injeção de dependencia da interface "IUserService"!
+
+    <blockquote>
+
+        //Define uma rota, define que é o controle de uma API! e não de MVC
+        [ Route(" api/[controller]")] 
+
+        //Define que é WebApi
+        [ ApiController] 
+
+        public class UsersController : ControllerBase
+        {
+
+            private IUserService _service;
+            public UsersController(IUserService service)
+            {
+                _service = service;
+            }
+
+        }
+    
+    </blockquote>
+
+    No codigo o parametro que declada um serviço: "[ FromServices] IUserService service" foi removido
+
+    "ModelState.IsValid" é uma variavel do proprio ASP.NET Core, que serve para validar oque está vindo na rota!
+
+    ArgumentException: Trata erro de controller!
 
     <blockquote>
 
@@ -791,8 +819,7 @@ Site: https://www.nuget.org/
 
     <blockquote>
 
-    vai da erro precisa tratar a injeção de dependencia e o projeto CrossCutting
-
+    Vai da erro na injeção de dependencia, precisa configurar a injeção de dependencia no projeto CrossCutting para dar continuidade ao controle!
 
 - 3° Adiciona mais ferefencia no projeto Api.CrossCutting
 
@@ -802,9 +829,9 @@ Site: https://www.nuget.org/
 
     <blockquote>dotnet add .\Api.CrossCutting\ reference .\Api.Data\</blockquote>
 
-    Vai aparecer outro erro de , referencia circular , para re solver remova a referencia CrossCutting do projeto de service
+    Vai aparecer um erro de referencia circular, para resolver remova a referencia CrossCutting do projeto de service, caso tenha!
 
-# instala o AutoMaper
+# instala o AutoMaper no projeto Api.CrossCutting
 
 - Comando que cria o AutoMaper
 
@@ -813,7 +840,43 @@ Site: https://www.nuget.org/
     </blockquote>
 
 
-# Instalando e usando o Swagger!
+    No projeto Api.CrossCutting cria uma pasta com o nome de "DependencyInjection"!
+    Nessa pasta crie um arquivo chamado "ConfigureService"!
+    Cria um método static para que seja chamado, sem precisar criar objeto!
+
+
+    <blockquote>
+
+    public class ConfigureService
+    {
+
+        /// <summary>
+
+        /// Uma configuração de injeção de dependencia, também pode ser achado na classe StartUp!
+
+        /// </summary>
+
+        /// <param name="serviceCollection"></param>
+
+        public static void ConfigureDependenciesService(IServiceCollection serviceCollection)
+        {
+
+            //método .AddSingleton: ele não muda a instancia.
+
+            //método .AddTransient: sempre cria uma nova instancia.
+
+            //método .AddScoped: usa a mesma instancia.
+
+            serviceCollection.AddTransient<IUserService, UserService>();
+
+        }
+
+    }
+
+    </blockquote>
+
+
+# Instalando e usando o Swagger! no projeto Api.Application
 
 - Swashbuckle.Aps.NetCore
 

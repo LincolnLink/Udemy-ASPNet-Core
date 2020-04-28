@@ -664,14 +664,12 @@ Site: https://www.nuget.org/
     </blockquote> 
 
 
-
 - 2° Cria referencias para a Service!
 
     <blockquote>dotnet add .\Api.Service\ reference .\Api.Domain\</blockquote> 
 
     <blockquote> dotnet add .\Api.Service\ reference .\Api.Data\</blockquote> 
-
-     
+    
 
 - 3° A implementação
 
@@ -742,12 +740,9 @@ Site: https://www.nuget.org/
 
 
 
-# Tratando o projeto Api.Aplication
+# Criando a classe de controle (projeto Api.Aplication)  
 
-
-- Criando a classe de controle!    
-
-    Adicione algumas referencias no projeto Api.Aplication !!
+- 1° Adicione algumas referencias no projeto Api.Aplication !!
 
     <blockquote>dotnet add Api.Application reference Api.Domain</blockquote>
 
@@ -755,7 +750,7 @@ Site: https://www.nuget.org/
 
     <blockquote>dotnet add Api.Application reference Api.CrossCutting</blockquote>
 
-    Cria uma classe com nome de "UsersController"
+- 2° Cria uma classe com nome de "UsersController"
 
     Criando o GetAll com tratamento
 
@@ -799,7 +794,7 @@ Site: https://www.nuget.org/
     vai da erro precisa tratar a injeção de dependencia e o projeto CrossCutting
 
 
-- Adiciona mais ferefencia no projeto Api.CrossCutting
+- 3° Adiciona mais ferefencia no projeto Api.CrossCutting
 
     <blockquote>dotnet add .\Api.CrossCutting\ reference .\Api.Domain\</blockquote>
 
@@ -807,79 +802,83 @@ Site: https://www.nuget.org/
 
     <blockquote>dotnet add .\Api.CrossCutting\ reference .\Api.Data\</blockquote>
 
-    Vai aparecer outro erro de , referencia circular , para re solver re mova a referencia CrossCutting do projeto de service
+    Vai aparecer outro erro de , referencia circular , para re solver remova a referencia CrossCutting do projeto de service
 
-- instala o AutoMaper
+# instala o AutoMaper
 
-    <blockquote>dotnet add package AutoMapper.Extensions.Microsoft.DependencyInjection --version 7.0.0</blockquote>
+- Comando que cria o AutoMaper
 
+    <blockquote>
+        dotnet add package AutoMapper.Extensions.Microsoft.DependencyInjection --version 7.0.0
+    </blockquote>
 
-
-
-.............
 
 # Instalando e usando o Swagger!
 
 - Swashbuckle.Aps.NetCore
 
-https://www.nuget.org/packages/Swashbuckle.AspNetCore/5.0.0-rc4
+    https://www.nuget.org/packages/Swashbuckle.AspNetCore/5.0.0-rc4
 
-dotnet add package Swashbuckle.AspNetCore --version 4.0.1
-<blockquote>foi instalada na Api.Application !</blockquote> 
+    foi instalada na Api.Application !
 
-configuração feita na classe Startup
+    <blockquote> dotnet add package Swashbuckle.AspNetCore --version 4.0.1</blockquote>    
+    
 
 - Configuração do Swagger! (antes do addMVC)
 
-`
+    Configuração feita na classe Startup
 
-services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1",
-                new Info
-                {
-                    Title = "API AspNetCore 2.2",
-                    Version = "v1",
-                    Description = "Exemplo de API REST criado com ASP.NET Core",
-                    Contact = new Contact
+    <blockquote>
+
+    services.AddSwaggerGen(c =>
+                {                    
+                    c.SwaggerDoc("v1",
+                    new Info
                     {
-                        Name = "Lincoln Ferreira Campos",
-                        Url = "https://github.com/LincolnLink"
-                    }
+
+                        Title = "API AspNetCore 2.2",
+                        Version = "v1",
+                        Description = "Exemplo de API REST criado com ASP.NET Core",
+                        Contact = new Contact
+
+                        {
+
+                            Name = "Lincoln Ferreira Campos",
+                            Url = "https://github.com/LincolnLink"
+
+                        }
+
+                    });
+
                 });
-            });
 
-
-`
+    </blockquote>
 
 
 
 - Ativando middlewares paa uso do Swagger (no método Configure, antes do app.usemvc)
 
+    <blockquote>
 
-`
+    app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.RoutePrefix = string.Empty;
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "API com AspNetCore 2.2");
+                });
 
-
-app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.RoutePrefix = string.Empty;
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "API com AspNetCore 2.2");
-            });
-`
+    </blockquote>
 
 
 - Redireciona o Link para o Swagger, quando acessar a rota principal (no método Configure, antes do app.usemvc)
 
-`
+    <blockquote>
 
+        var option = new RewriteOptions();
+                option.AddRedirect("^$", "swagger");
+                app.UseRewriter(option);
 
-
-var option = new RewriteOptions();
-            option.AddRedirect("^$", "swagger");
-            app.UseRewriter(option);
-
-`
+    </blockquote>
 
 
 # Resolvendo problema com politica de requisição

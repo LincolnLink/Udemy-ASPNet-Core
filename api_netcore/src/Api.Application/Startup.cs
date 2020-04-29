@@ -28,8 +28,10 @@ namespace Application
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            /// Configuração da Injeção de dependencia do serviço
             ConfigureService.ConfigureDependenciesService(services);
 
+            /// Configuração da Injeção de dependencia do repositorio
             ConfigureRepository.ConfigureDependenciesRepository(services);
 
             //Configuração do Swagger!

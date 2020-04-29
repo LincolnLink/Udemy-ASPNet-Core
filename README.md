@@ -734,11 +734,121 @@ Site: https://www.nuget.org/
 
     <blockquote>
 
-
     Em cada método desse é possivel por as regras de negocio, o projeto de Api.Service serve para ser um intermediario do projeto Api.Aplicação para a Api.Infra/Data ! 
     OBS: não se deve por validação! 
 
 
+# Configurando o projeto Api.CrossCutting
+
+- Adiciona mais ferefencia no projeto Api.CrossCutting
+
+    <blockquote>dotnet add .\Api.CrossCutting\ reference .\Api.Domain\</blockquote>
+
+    <blockquote>dotnet add .\Api.CrossCutting\ reference .\Api.Service\</blockquote>
+
+    <blockquote>dotnet add .\Api.CrossCutting\ reference .\Api.Data\</blockquote>
+
+    Vai aparecer um erro de referencia circular, para resolver remova a referencia CrossCutting do projeto de service, caso tenha!
+
+- instala o AutoMaper no projeto Api.CrossCutting
+
+    Comando que cria o AutoMaper
+
+    <blockquote>
+        dotnet add package AutoMapper.Extensions.Microsoft.DependencyInjection --version 7.0.0
+    </blockquote>
+
+
+# Configurando a Injeção de dependencia
+
+- Configurando a Injeção de dependencia do serviço!
+
+    O projeto Api.CrossCutting, serve para o projeto Api.Aplication continuar não tendo acesso ao projeto Api.Data, por isso se deve por a configuração de Injeção de Dependencia nesse projeto, também serve para deixar a classe Startup mais limpa!
+
+    No projeto Api.CrossCutting cria uma pasta com o nome de "DependencyInjection"!
+    Nessa pasta crie um arquivo chamado "ConfigureService"!
+    Cria um método static para que seja chamado, sem precisar criar objeto!
+
+    <blockquote>
+
+    public class ConfigureService
+    {
+
+        /// <summary>
+
+        /// Uma configuração de injeção de dependencia, também pode ser achado na classe StartUp!
+
+        /// </summary>
+
+        /// <param name="serviceCollection"></param>
+
+        public static void ConfigureDependenciesService(IServiceCollection serviceCollection)
+        {
+
+            //método .AddSingleton: ele não muda a instancia.
+
+            //método .AddTransient: sempre cria uma nova instancia.
+
+            //método .AddScoped: usa a mesma instancia(usar em conexão de banco).
+
+            serviceCollection.AddTransient<IUserService, UserService>();
+
+        }
+
+    }
+
+    </blockquote>
+
+    No método "ConfigureServices" da classe "Startup" do projeto Api.Aplication, chama a classe de configuração das Injeção de dependencia, passando o parametro padrão que o método "ConfigureServices" recebe, exemplo: 
+
+    <blockquote>
+
+        public void ConfigureServices(IServiceCollection services)        
+        {
+
+            /// Configuração da Injeção de dependencia do serviço
+
+            ConfigureService.ConfigureDependenciesService(services);
+
+            /// Configuração da Injeção de dependencia do repositorio
+
+            ConfigureRepository.ConfigureDependenciesRepository(services);
+
+        }
+
+    </blockquote>
+
+- Configurando a Injeção de dependencia do repositorio!
+
+    Na pasta "DependencyInjection" cria uma classe chamada "ConfigureRepository"
+    Nessa classe cria um método static chamado "ConfigureDependenciesRepository"
+    Quando a Interface é generica se deve por o método "typeof()"!    
+
+    <blockquote>
+        public class ConfigureRepository
+        {
+
+            public static void ConfigureDependenciesRepository(IServiceCollection serviceCollection)
+            {
+
+                //método .AddSingleton: ele não muda a instancia.
+
+                //método .AddTransient: sempre cria uma nova instancia.
+
+                //método .AddScoped: usa a mesma instancia.
+
+                serviceCollection.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
+
+                serviceCollection.AddDbContext<MyContext>( options => 
+                options.UseMySql("Server=localhost;Port=3306;Database=dbAPI;Uid=root;Pwd=84190162")
+
+                );
+
+            }
+
+        }
+
+    </blockquote>
 
 # Criando a classe de controle (projeto Api.Aplication)  
 
@@ -776,6 +886,8 @@ Site: https://www.nuget.org/
     
     </blockquote>
 
+- GetAll
+
     No codigo o parametro que declada um serviço: "[ FromServices] IUserService service" foi removido
 
     "ModelState.IsValid" é uma variavel do proprio ASP.NET Core, que serve para validar oque está vindo na rota!
@@ -784,12 +896,8 @@ Site: https://www.nuget.org/
 
     <blockquote>
 
-        [ HttpGet]
-
-        //faz referencia do service
-
-        public async Task< ActionResult> GetAll([FromServices] IUserService service) 
-               
+        [ HttpGet] 
+        public async Task< ActionResult> GetAll()                
         {
 
             //Verifica se a informação que está vindo da rota é valida!
@@ -821,59 +929,44 @@ Site: https://www.nuget.org/
 
     Vai da erro na injeção de dependencia, precisa configurar a injeção de dependencia no projeto CrossCutting para dar continuidade ao controle!
 
-- 3° Adiciona mais ferefencia no projeto Api.CrossCutting
-
-    <blockquote>dotnet add .\Api.CrossCutting\ reference .\Api.Domain\</blockquote>
-
-    <blockquote>dotnet add .\Api.CrossCutting\ reference .\Api.Service\</blockquote>
-
-    <blockquote>dotnet add .\Api.CrossCutting\ reference .\Api.Data\</blockquote>
-
-    Vai aparecer um erro de referencia circular, para resolver remova a referencia CrossCutting do projeto de service, caso tenha!
-
-# instala o AutoMaper no projeto Api.CrossCutting
-
-- Comando que cria o AutoMaper
-
-    <blockquote>
-        dotnet add package AutoMapper.Extensions.Microsoft.DependencyInjection --version 7.0.0
-    </blockquote>
-
-
-    No projeto Api.CrossCutting cria uma pasta com o nome de "DependencyInjection"!
-    Nessa pasta crie um arquivo chamado "ConfigureService"!
-    Cria um método static para que seja chamado, sem precisar criar objeto!
-
+- Get
 
     <blockquote>
 
-    public class ConfigureService
+    [ HttpGet]    
+    [ EnableCors("CorsPolicy")]
+    [Route("{id}", Name = "GetWithId")]
+    public async Task< ActionResult> Get(Guid id)
     {
-
-        /// <summary>
-
-        /// Uma configuração de injeção de dependencia, também pode ser achado na classe StartUp!
-
-        /// </summary>
-
-        /// <param name="serviceCollection"></param>
-
-        public static void ConfigureDependenciesService(IServiceCollection serviceCollection)
+        //Verifica se a informação que está vindo da rota é valida!
+        
+        if (!ModelState.IsValid)
         {
 
-            //método .AddSingleton: ele não muda a instancia.
+            return BadRequest(ModelState); //400 bad request - solicitação invalida!
 
-            //método .AddTransient: sempre cria uma nova instancia.
+        }
 
-            //método .AddScoped: usa a mesma instancia.
+        try
+        {
 
-            serviceCollection.AddTransient<IUserService, UserService>();
+            return Ok(await _service.Get(id));
+
+        }
+        catch (ArgumentException e) //trata erros de controller!
+        {
+
+            //Resposta para o navegador! - erro 500
+
+            return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
 
         }
 
     }
 
     </blockquote>
+
+
 
 
 # Instalando e usando o Swagger! no projeto Api.Application

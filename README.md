@@ -933,36 +933,36 @@ Site: https://www.nuget.org/
 
     <blockquote>
 
-    [ HttpGet]    
-    [ EnableCors("CorsPolicy")]
-    [Route("{id}", Name = "GetWithId")]
-    public async Task< ActionResult> Get(Guid id)
-    {
-        //Verifica se a informação que está vindo da rota é valida!
-        
-        if (!ModelState.IsValid)
+        [ HttpGet]    
+        [ EnableCors("CorsPolicy")]
+        [Route("{id}", Name = "GetWithId")]
+        public async Task< ActionResult> Get(Guid id)
         {
+            //Verifica se a informação que está vindo da rota é valida!
+            
+            if (!ModelState.IsValid)
+            {
 
-            return BadRequest(ModelState); //400 bad request - solicitação invalida!
+                return BadRequest(ModelState); //400 bad request - solicitação invalida!
+
+            }
+
+            try
+            {
+
+                return Ok(await _service.Get(id));
+
+            }
+            catch (ArgumentException e) //trata erros de controller!
+            {
+
+                //Resposta para o navegador! - erro 500
+
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+
+            }
 
         }
-
-        try
-        {
-
-            return Ok(await _service.Get(id));
-
-        }
-        catch (ArgumentException e) //trata erros de controller!
-        {
-
-            //Resposta para o navegador! - erro 500
-
-            return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
-
-        }
-
-    }
 
     </blockquote>
 

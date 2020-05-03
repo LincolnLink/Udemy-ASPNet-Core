@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Api.CrossCutting.DependencyInjection;
+﻿using Api.CrossCutting.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace Application
@@ -40,7 +33,7 @@ namespace Application
                 c.SwaggerDoc("v1",
                 new Info
                 {
-                    Title = "API AspNetCore 2.2",
+                    Title = "API AspNetCore 2.2/3.0/3.1",
                     Version = "v1",
                     Description = "Exemplo de API REST criado com ASP.NET Core",
                     Contact = new Contact

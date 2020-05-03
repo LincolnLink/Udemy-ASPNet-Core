@@ -1,7 +1,7 @@
 # Udemy-ASPNet-Core
 Desenvolvendo uma API com ajuda de um curso da Udemy
 
-- [x] Dot.Net 2.2
+- [x] Dot.Net 2.2/3.0/3.1
 - [x] MySQL
 - [x] Entity Framework Core 2.2.6
 - [x] Swagger 4.0.1
@@ -966,23 +966,176 @@ Site: https://www.nuget.org/
 
     </blockquote>
 
+- Post
 
+    <blockquote>
+
+        [HttpPost]
+        [EnableCors("CorsPolicy")]
+        public async Task<ActionResult> Post([FromBody] UserEntity user)
+        {
+            
+            //Verifica se a informação que está vindo da rota é valida!
+            if (!ModelState.IsValid)
+            {
+
+                return BadRequest(ModelState);
+
+            }
+
+            try
+            {
+
+                var result = await _service.Post(user);
+                if (result != null)
+                {
+
+                    return Created(new Uri(Url.Link("GetWithId", new { id = result.Id })), result);
+
+                }
+                else
+                {
+
+                    return BadRequest();
+
+                }
+
+            }
+            catch (ArgumentException e)
+            {
+
+                //Resposta para o navegador! - erro 500
+
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+
+            }
+        }
+
+    </blockquote>
+
+- Put
+
+    <blockquote>
+
+        [ HttpPut]
+
+        [ EnableCors("CorsPolicy")]
+
+        public async Task<ActionResult> Put([FromBody] UserEntity user)
+        {
+
+            //Verifica se a informação que está vindo da rota é valida!
+
+            if (!ModelState.IsValid)
+            {
+
+                return BadRequest(ModelState);
+
+            }
+
+            try
+            {
+
+                var result = await _service.Put(user);
+
+                if (result != null)
+                {
+
+                    return Ok(result);
+
+                }
+                else
+                {
+
+                    return BadRequest();
+
+                }
+
+            }
+            catch (ArgumentException e)
+            {
+
+                //Resposta para o navegador! - erro 500
+
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+
+            }
+
+        }
+
+    </blockquote>
+
+- Delete 
+
+    <blockquote>
+
+        [ HttpDelete("{id}")] //("{id}")
+        [ EnableCors("CorsPolicy")]
+
+        public async Task< ActionResult> Delete(Guid id)
+        {
+
+            //Verifica se a informação que está vindo da rota é valida!
+
+            if (!ModelState.IsValid)
+            {
+
+                return BadRequest(ModelState);
+
+            }
+
+            try
+            {
+
+                var result = await _service.Delete(id);
+
+                if (result)
+                {
+
+                    return Ok(result);
+
+                }
+                else
+                {
+
+                    return BadRequest();
+
+                }
+
+            }
+            catch (ArgumentException e)
+            {
+
+                //Resposta para o navegador! - erro 500
+
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+
+            }
+
+        }
+
+    </blockquote>
 
 
 # Instalando e usando o Swagger! no projeto Api.Application
 
-- Swashbuckle.Aps.NetCore
+- Procura o "Swashbuckle.Aps.NetCore" no nuget
 
     https://www.nuget.org/packages/Swashbuckle.AspNetCore/5.0.0-rc4
 
+    Documentação: 
+    https://github.com/domaindrivendev/Swashbuckle.AspNetCore
+
     foi instalada na Api.Application !
+
+    Escolhe a opção: .Net CLI !
 
     <blockquote> dotnet add package Swashbuckle.AspNetCore --version 4.0.1</blockquote>    
     
 
 - Configuração do Swagger! (antes do addMVC)
 
-    Configuração feita na classe Startup
+    Configuração feita na classe Startup, no método "ConfigureServices()"
 
     <blockquote>
 
@@ -1014,14 +1167,16 @@ Site: https://www.nuget.org/
 
 - Ativando middlewares paa uso do Swagger (no método Configure, antes do app.usemvc)
 
+    Configuração feita na classe Startup, no método "Configure"
+
     <blockquote>
 
     app.UseSwagger();
-                app.UseSwaggerUI(c =>
-                {
-                    c.RoutePrefix = string.Empty;
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "API com AspNetCore 2.2");
-                });
+    app.UseSwaggerUI(c =>
+    {
+        c.RoutePrefix = string.Empty;
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "API com AspNetCore 2.2");
+    });
 
     </blockquote>
 
@@ -1031,12 +1186,26 @@ Site: https://www.nuget.org/
     <blockquote>
 
         var option = new RewriteOptions();
-                option.AddRedirect("^$", "swagger");
-                app.UseRewriter(option);
+        option.AddRedirect("^$", "swagger");
+        app.UseRewriter(option);
 
     </blockquote>
 
 
 # Resolvendo problema com politica de requisição
 
-https://stackoverflow.com/questions/54085677/how-to-configure-angular-6-with-net-core-2-to-allow-cors-from-any-host
+- Solução para politica de requisição, deve por um metadata em cada endpoint
+
+    https://stackoverflow.com/questions/54085677/how-to-configure-angular-6-with-net-core-2-to-allow-cors-from-any-host
+
+    Configure na classe "Startup" no método "Configure"
+
+    <blockquote>
+
+    app.UseCors("CorsPolicy");
+
+    </blockquote>
+
+# Instalando SQL no projeto!
+
+- 

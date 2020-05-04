@@ -1242,14 +1242,14 @@ Site: https://www.nuget.org/
 
     Troca a connectionString do MySql pela do SqlServe
 
-    -- Antiga
+    - Antiga
 
     <blockquote>
     var connectionString = "Server=localhost;Port=3306;Database=dbAPI;Uid=root;Pwd=root123";
     optionsBuilder.UseMySql(connectionString);
     </blockquote>
 
-    -- Nova
+    - Nova
 
     <blockquote>
     var connectionString = "Server=.\ \SQLEXPRESS2017;Database=dbAPI;User Id=sa;Password=root123";
@@ -1262,7 +1262,7 @@ Site: https://www.nuget.org/
 
 - No projeto Api.CrossCutting na classe "ConfigureRepository", deve trocar a conexão do MySql pela do SqlServer!
 
-    -- Antiga
+    - Antiga
 
     <blockquote> 
 
@@ -1274,7 +1274,7 @@ Site: https://www.nuget.org/
     
     </blockquote>
 
-    -- Nova
+    - Nova
 
     <blockquote> 
     
@@ -1296,8 +1296,7 @@ Site: https://www.nuget.org/
 # JWT
 
 - JWT(JSON Web Token) é um sistema de transferência de dados que pode ser enviado via POST ou em um cabeçalho HTTP (header).
-
-JWT é um padrão de mercado que define um token em formato JSON para troca de informações leve e segura!
+    JWT é um padrão de mercado que define um token em formato JSON para troca de informações leve e segura!
 
 - Características: 
 
@@ -1306,4 +1305,26 @@ JWT é um padrão de mercado que define um token em formato JSON para troca de i
     - AutoContido: Traz consigo toda as informação necessárias para o seu processamento
 
     - Seguro: Ultiliza Algoritimo de hashing para validação da integridade do token
+
+- Quando Ultilizar o JWT
+
+    - Para troca de informação entre aplicações
+
+    - Em mecanismo de Autenticação como por exemplo Autenticar Pessoas em Endpoint que não são púclicos
+
+    Como um Token você deixa de ficar fazendo login a cada requesição enviada em cada requisição REST, isto deixa seus endpoint mais leves, eficiente e Segura.
+
+    Token tem uma validade quando seu prazo termina o token vai ser descartado.
+
+- Resumo: Quando se loga pela primeira vez é gerado um token que tem um tempo de vida curto(2h), quando o usuario precisa fazer outra requisição, é enviado apenas o token, para não precisar ter que fazer outra requisição! 
+
+- O JWT é dividido em 3 partes!
+
+    - header
+    - payload
+    - signature
+
+
+
+
 

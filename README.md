@@ -5,6 +5,7 @@ Desenvolvendo uma API com ajuda de um curso da Udemy
 - [x] MySQL
 - [x] Entity Framework Core 2.2.6
 - [x] Swagger 4.0.1
+- [x] SQL Server 2017 express
 
 ## Extension install
 
@@ -1208,4 +1209,14 @@ Site: https://www.nuget.org/
 
 # Instalando SQL no projeto!
 
-- 
+- Microsoft® SQL Server® 2017 Express    
+
+    https://www.microsoft.com/pt-br/download/details.aspx?id=55994 
+
+- SQL Server Management Studio
+
+    https://docs.microsoft.com/pt-br/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver15
+
+- Instalando e Configurando o pacote do SQL no projeto Api.Data
+
+    <blockquote></blockquote>

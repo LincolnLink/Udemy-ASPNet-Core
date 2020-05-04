@@ -382,7 +382,7 @@ Site: https://www.nuget.org/
 
     <blockquote>dotnet ef migrations add UserMigration</blockquote>
 
-    - -UserMigration nome da migração, pode ser chamado de "First_Migration" caso seja a primeira!
+    - UserMigration nome da migração, pode ser chamado de "First_Migration" caso seja a primeira!
 
     No arquivo "ContextFactory" você alem de por a senha e usuario do servidor MySql, define o banco da migração, caso seja a primeira migração, cria um nome para o seu banco de dados!
 
@@ -1226,6 +1226,84 @@ Site: https://www.nuget.org/
 
     https://docs.microsoft.com/pt-br/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver15
 
-- Instalando e Configurando o pacote do SQL no projeto Api.Data
+- Instalando o pacote do SQL no projeto Api.Data
 
-    <blockquote></blockquote>
+    Microsoft EntityFrameworkCore SqlServer (Versão 2.2.6)
+    <blockquote>
+        dotnet add package Microsoft.EntityFrameworkCore.SqlServer --version 2.2.6
+    </blockquote>
+
+    Microsoft EntityFrameworkCore SqlServer Design
+    <blockquote>
+        dotnet add package Microsoft.EntityFrameworkCore.SqlServer.Design --version 1.1.6
+    </blockquote>
+
+- Configurando o pacote do SQL no projeto Api.Data na classe "ContextFactory"
+
+    Troca a connectionString do MySql pela do SqlServe
+
+    -- Antiga
+
+    <blockquote>
+    var connectionString = "Server=localhost;Port=3306;Database=dbAPI;Uid=root;Pwd=root123";
+    optionsBuilder.UseMySql(connectionString);
+    </blockquote>
+
+    -- Nova
+
+    <blockquote>
+    var connectionString = "Server=.\ \SQLEXPRESS2017;Database=dbAPI;User Id=sa;Password=root123";
+    optionsBuilder.UseSqlServer(connectionString);
+    </blockquote>
+
+    Quando trocar executa o comando do EF para atualizar!
+
+    <blockquote>dotnet ef database update</blockquote>
+
+- No projeto Api.CrossCutting na classe "ConfigureRepository", deve trocar a conexão do MySql pela do SqlServer!
+
+    -- Antiga
+
+    <blockquote> 
+
+    serviceCollection.AddDbContext< MyContext>(
+
+    options => options.UseMySql("Server=localhost;Port=3306;Database=dbAPI;Uid=root;Pwd=root123")
+
+    );
+    
+    </blockquote>
+
+    -- Nova
+
+    <blockquote> 
+    
+    serviceCollection.AddDbContext< MyContext>(
+        options => options.UseSqlServer("Server=.\ \SQLEXPRESS2017;Database=dbAPI;User Id=sa;Password=root123")
+    );
+    
+    </blockquote>
+
+- Migração automatica (Opcional)
+
+    No método construtor da classe "MyContext()" foi colocado um método!
+
+    <blockquote>
+        Database.Migrate();
+    </blockquote>
+
+
+# JWT
+
+- JWT(JSON Web Token) é um sistema de transferência de dados que pode ser enviado via POST ou em um cabeçalho HTTP (header).
+
+JWT é um padrão de mercado que define um token em formato JSON para troca de informações leve e segura!
+
+- Características: 
+
+    - Leve: Adota Json para troca de informação
+
+    - AutoContido: Traz consigo toda as informação necessárias para o seu processamento
+
+    - Seguro: Ultiliza Algoritimo de hashing para validação da integridade do token
+

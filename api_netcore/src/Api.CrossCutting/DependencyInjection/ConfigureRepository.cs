@@ -15,9 +15,15 @@ namespace Api.CrossCutting.DependencyInjection
             //método .AddScoped: usa a mesma instancia.
             serviceCollection.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
 
+            /*Nova, do SqlServe*/
             serviceCollection.AddDbContext<MyContext>(
+               options => options.UseSqlServer("Server=.\\SQLEXPRESS2017;Database=dbAPI;User Id=sa;Password=root123")
+            );
+
+            /*Antiga, do MySql*/
+            /*serviceCollection.AddDbContext<MyContext>(
                options => options.UseMySql("Server=localhost;Port=3306;Database=dbAPI;Uid=root;Pwd=root123")
-           );
+            );*/  
         }
     }
 }

@@ -19,6 +19,15 @@ Desenvolvendo uma API com ajuda de um curso da Udemy
 - [x] cmd personalizado: https://cmder.net/
 - [x] Visual Studio Code
 
+## Link's Que me ajudou com o projeto
+
+- Comandos do GitHub
+
+    https://gist.github.com/leocomelli/2545add34e4fec21ec16
+
+- Curso do DotNet Core 2.2/3.0/3.1
+
+    https://www.udemy.com/course/aspnet-core-22-c-api-com-arquitetura-ddd-na-pratica/
 
 
 # API e Micro serviços (#37)

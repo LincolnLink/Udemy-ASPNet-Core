@@ -16,6 +16,8 @@ namespace Api.CrossCutting.DependencyInjection
             //método .AddTransient: sempre cria uma nova instancia.
             //método .AddScoped: usa a mesma instancia.
             serviceCollection.AddTransient<IUserService, UserService>();
+
+            serviceCollection.AddTransient<ILoginService, LoginService>();
         }
     }
 }

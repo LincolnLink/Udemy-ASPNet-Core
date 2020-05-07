@@ -6,6 +6,7 @@ Desenvolvendo uma API com ajuda de um curso da Udemy
 - [x] Entity Framework Core 2.2.6
 - [x] Swagger 4.0.1
 - [x] SQL Server 2017 express
+- [x] JWT
 
 ## Extension install
 
@@ -1323,6 +1324,97 @@ Site: https://www.nuget.org/
     - header
     - payload
     - signature
+
+- Criando um método de extensão para criar um método que faça login(Começando no projeto Api.Data e Api.Domain)
+
+    - Criando uma Interface que tem o método extendido que trata o login do Usuario
+
+    Cria uma pasta com o nome de "Repository" no projeto Api.Domain, dentro da pasta cria uma interface chamada "IUserRepository", aonde Implementa a interface "IRepository< UserEntity>"
+
+
+    <blockquote>
+            
+        namespace Api.Domain.Interfaces
+        {
+            public interface IUserRepository: IRepository< UserEntity>
+            {
+
+                Task<UserEntity> FindByLogin (string email);
+            }
+        }
+    </blockquote>
+
+    - Criando uma classe que implementa a interface que tem o método extendido que trata o login do Usuario!
+
+    Cria uma pasta com o nome "Implementations" no projeto Api.Data, na pasta cria uma classe com o nome "UserImplementation", que herda a classe "BaseRepository< UserEntity>" e implementa a interface "IUserRepository", para fazer o método extendido ter um corpo!
+
+    <blockquote>
+
+        public class UserImplementation: BaseRepository< UserEntity>, IUserRepository
+        {
+            private DbSet<UserEntity> _dataset;
+
+            public UserImplementation(MyContext context) : base(context)
+            {
+
+                _dataset = context.Set< UserEntity>();
+
+            }
+
+            public async Task< UserEntity> FindByLogin(string email)
+            {
+
+                return await _dataset.FirstOrDefaultAsync(u => u.Email.Equals(email));
+
+            }
+        }
+
+    </blockquote>
+    
+
+- Método de Login no projeto Api.Service
+
+    - Cria uma interface com o nome de "ILoginService", na pasta "Service/User" no projeto "Api.Domain"!
+
+    <blockquote> 
+
+    public interface ILoginService
+    {
+         Task< object> FindByLogin(UserEntity user);
+    }
+
+    </blockquote>
+
+    - Cria uma classe chamada "LoginService" no projeto "Api.Service", aonde ele implementa a interface "ILoginService"
+
+    <blockquote>
+
+        public async Task<object> FindByLogin(UserEntity user)
+        {
+            var baseUser = new UserEntity();
+            if(user != null && !string.IsNullOrWhiteSpace(user.Email))
+            {
+                baseUser = await _repository.FindByLogin(user.Email);
+                if(baseUser == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return baseUser;
+                }
+            }
+            else
+            {
+                return null;
+            }            
+        }
+
+    </blockquote>
+
+
+
+
 
 
 

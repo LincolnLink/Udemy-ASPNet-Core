@@ -1389,25 +1389,43 @@ Site: https://www.nuget.org/
 
     <blockquote>
 
-        public async Task<object> FindByLogin(UserEntity user)
+        public class LoginService : ILoginService
         {
-            var baseUser = new UserEntity();
-            if(user != null && !string.IsNullOrWhiteSpace(user.Email))
+            private IUserRepository _repository;
+
+            public LoginService(IUserRepository repository )
             {
-                baseUser = await _repository.FindByLogin(user.Email);
-                if(baseUser == null)
+
+                _repository = repository;
+
+            }
+
+            public async Task<object> FindByLogin(UserEntity user)
+            {
+
+                var baseUser = new UserEntity();
+                if(user != null && !string.IsNullOrWhiteSpace(user.Email))
                 {
-                    return null;
+
+                    baseUser = await _repository.FindByLogin(user.Email);
+                    if(baseUser == null)
+                    {
+
+                        return null;
+
+                    }
+                    else
+                    {
+
+                        return baseUser;
+                    }
                 }
                 else
                 {
-                    return baseUser;
-                }
+                    
+                    return null;
+                }            
             }
-            else
-            {
-                return null;
-            }            
         }
 
     </blockquote>

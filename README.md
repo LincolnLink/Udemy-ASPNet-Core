@@ -8,19 +8,19 @@ Desenvolvendo uma API com ajuda de um curso da Udemy
 - [x] SQL Server 2017 express
 - [x] JWT
 
-## Extension install
+# Extension install
 
 - [x] C#
 - [x] C# Extensions
 - [x] C# XML Documentation Comments
 - [x] vscode-icons
 
-## Programas
+# Programas
 
 - [x] cmd personalizado: https://cmder.net/
 - [x] Visual Studio Code
 
-## Link's Que me ajudou com o projeto
+# Link's Que me ajudou com o projeto
 
 - Comandos do GitHub
 
@@ -70,54 +70,56 @@ Desenvolvendo uma API com ajuda de um curso da Udemy
 
 # Comandos basicos do DotNet
 
-### Comando para criar uma solution!
+- Comando para criar uma solution!
 
-<blockquote>dotnet new sln --name CSharpBasico</blockquote>
+    <blockquote>dotnet new sln --name CSharpBasico</blockquote>
 
-### Comando que lista opções de projetos!
+- Comando que lista opções de projetos!
 
-<blockquote>dotnet new</blockquote>
+    <blockquote>dotnet new</blockquote>
 
-### Comando para criar um projeto, com uma pasta!
+- Comando para criar um projeto, com uma pasta!
 
-<blockquote>dotnet new console -n HelloWorld -o helloWorld</blockquote>
+    <blockquote>dotnet new console -n HelloWorld -o helloWorld</blockquote>
 
-- -n: nome do projeto console!
-- -o: nome da pasta!
+    - -n: nome do projeto console!
+    - -o: nome da pasta!
 
-### Comando que Vincula um projeto a uma solução existente
+- Comando que Vincula um projeto a uma solução existente
 
-<blockquote>dotnet sln add 'nomeDoProjeto'</blockquote>
+    <blockquote>dotnet sln add 'nomeDoProjeto'</blockquote>
 
-### Comando que limpando a aplicação
+- Comando que limpando a aplicação
 
-<blockquote>dotnet clean</blockquote>
+    <blockquote>dotnet clean</blockquote>
 
-### Comando que restalra a aplicação
+- Comando que restalra a aplicação
 
-<blockquote>dotnet restore</blockquote>
+    <blockquote>dotnet restore</blockquote>
 
-### Comando para Buildar a aplicação!
+- Comando para Buildar a aplicação!
 
-<blockquote>dotnet build</blockquote>
+    <blockquote>dotnet build</blockquote>
 
-### Comando que Executa um projeto
+- Comando que Executa um projeto
 
-<blockquote>dotnet run</blockquote>
+    <blockquote>dotnet run</blockquote>
 
-### Comando que Abre o codigo no VS code
+- Comando que Abre o codigo no VS code
 
-<blockquote>code .</blockquote>
+    <blockquote>code .</blockquote>
 
-### Comando que criando uma pasta
+- Comando que criando uma pasta
 
-<blockquote>md "nome da pagina"</blockquote>
+    <blockquote>md "nome da pagina"</blockquote>
 
 
 
 # Configurando o VS code para dotnet core (#33)
 
-<blockquote>files -> referencia -> settings</blockquote>
+- Aconfiguração está na video aula #33
+
+    <blockquote> files -> referencia -> settings</blockquote>
 
 
 
@@ -1285,7 +1287,7 @@ Site: https://www.nuget.org/
     
     </blockquote>
 
-- Migração automatica (Opcional)
+# Migração automatica (Opcional)
 
     No método construtor da classe "MyContext()" foi colocado um método!
 
@@ -1406,7 +1408,7 @@ Site: https://www.nuget.org/
                 {
 
                     return await _repository.FindByLogin(user.Email);
-                    
+
                 }
                 else
                 {
@@ -1418,6 +1420,85 @@ Site: https://www.nuget.org/
         }
 
     </blockquote>
+
+- Método de Login no projeto Api.Application
+
+    Crie uma classe chamada "LoginController", herda a classe "ControllerBase"!
+
+    - Nesse exemplo de controller, a injeção de dependencia vai ser diretamente no método!
+
+    <blockquote>
+
+        [Route("login/[controller]")] //Define um roteamento
+        [ApiController] //Define que é WebApi
+        public class LoginController: ControllerBase
+        {   
+
+            [HttpPost]
+            [EnableCors("CorsPolicy")]
+            public async Task<ActionResult> Login([FromBody] UserEntity userEntity,[FromServices] ILoginService service)
+            {                
+                //Verifica se a informação que está vindo da rota é valida!
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                if(userEntity == null)
+                {
+                    return BadRequest();
+                }
+
+                try
+                {
+                    var result =  await service.FindByLogin(userEntity);
+                    if(result != null )
+                    {
+                        return Ok(result);
+                    }
+                    else
+                    {
+                        return NotFound();
+                    }
+
+                }
+                catch(ArgumentException e){
+
+                    //Resposta para o navegador! - erro 500
+                    return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+
+                }
+
+            }
+        }
+    </blockquote>
+
+# DTO - Data Transfer Object (É como se fosse a MODEL do MVC)
+
+- Crie uma pasta chamada Dtos no projeto Api.Domain, depois crie uma classe com o nome de "LoginDto", ela recebe uma propriedade string chamada "email", nessa propriedade é feita varias validações do valor!
+
+    <blockquote>
+    
+        public class LoginDto
+        {
+            [Required(ErrorMessage = "E-mail é um campo obrigatorio para login!")]
+            [EmailAddress(ErrorMessage = "E-mail com formato invalido!")]
+            [StringLength(100, ErrorMessage = "Email deve ter no maximo {1} caracteres")]
+            public string Email { get; set; }
+        }
+
+    </blockquote>
+
+- Na interface "ILoginService" troca o tipo do parametro que é passado no método "FindByLogin" para o tipo "LoginDto", com isso vai dar erro em outras classe, assim você deve trocar as outras também!
+
+    <blockquote>
+
+        public interface ILoginService
+        {
+            Task<object> FindByLogin(LoginDto user);
+        }
+
+    </blockquote>
+
 
 
 

@@ -14,14 +14,12 @@ namespace Api.Application.Controllers
     public class UsersController : ControllerBase
     {
 
-        private IUserService _service;
+        private IUserService _service;        
 
-        private ILoginService _loginService;
-
-        public UsersController(IUserService service, ILoginService login)
+        public UsersController(IUserService service)
         {
             _service = service;
-            _loginService = login;
+
         }
 
         [HttpGet]
@@ -161,41 +159,5 @@ namespace Api.Application.Controllers
             }
 
         }
-
-
-        [HttpGet]
-        [EnableCors("CorsPolicy")]
-        public async Task<ActionResult> GetEmail([FromBody] UserEntity user)
-        {
-            //Verifica se a informação que está vindo da rota é valida!
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            try
-            {
-                var emailValue =  await _loginService.FindByLogin(user);
-                if(emailValue != null )
-                {
-                    return Ok(emailValue);
-                }
-                else
-                {
-                    return BadRequest(ModelState);
-                }
-
-            }
-            catch(ArgumentException e){
-
-                //Resposta para o navegador! - erro 500
-                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
-
-            }
-
-
-
-        }
-
     }
 }

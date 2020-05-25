@@ -6,7 +6,7 @@ Desenvolvendo uma API com ajuda de um curso da Udemy
 - [x] Entity Framework Core 2.2.6
 - [x] Swagger 4.0.1
 - [x] SQL Server 2017 express
-- [x] JWT
+- [x] JWT 6.6.0
 
 # Extension install
 
@@ -1498,6 +1498,65 @@ Site: https://www.nuget.org/
         }
 
     </blockquote>
+
+- Implementa o "LoginDto" no lugar de "UserEntity" nas operações referente ao Login!
+
+    Ao subistituir aparece erros facil de resolver informando o "using"
+
+    Depois disso dara erro na requisição de login caso os valores não esteja na validação!
+
+    LoginDto avalia os dados antes mesmo de entrar na requisição !
+
+- Implementar Classe SigningConfigurations e TokenConfigurations
+
+
+    Instala o pacote! da opção .NET CLI, dentro do projeto Api.Domain!
+
+    link do site: https://www.nuget.org/packages/System.IdentityModel.Tokens.Jwt/
+
+    <blockquote>        
+
+        dotnet add package System.IdentityModel.Tokens.Jwt --version 6.6.0
+
+    </blockquote>
+
+    Crie uma pasta no projeto Api.Domain, chamada "Security" dentro dessa pasta cria uma classe chamada "TokenConfiguration", essa classe recebe 3 propriedades!
+ 
+    <blockquote>
+    
+        public class TokenConfiguration
+        {
+            //Publico
+            public string Audience { get; set; }
+
+            //Emissor
+            public string Issuer { get; set; }
+
+            //Segundos de validade
+            public int Seconds { get; set; }
+        }
+
+    </blockquote>
+
+    Cria uma segunda classe chamada "SigningConfigurations" na pasta "Security", ela recebe 2 propriedades!
+
+    Uma propriedade do tipo "SecurityKey" e outra do tipo "SigningCredentials"
+
+    No método construtor é feito uma instancia da classe "RSACryptoServiceProvider" e é passado uma chave "2048", essa chave representa o bit, uma variavel recebe essa instancia!
+
+    Dentro do método construtor a propriedade do tipo "SecurityKey" recebe uma instancia da classe "RsaSecurityKey", e é passado a variavel por parametro!
+
+    Quando se cria variavel usando Using, é uma forma de descartar a variavel na memoria depois de usada!
+
+    <blockquote>
+
+    </blockquote>
+
+    <blockquote>
+
+    </blockquote>
+
+
 
 
 

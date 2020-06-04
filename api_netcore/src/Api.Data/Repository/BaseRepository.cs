@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Api.Data.Context;
 using Api.Domain.Entities;
-using Api.Domain.Interfaces;
+using Api.Domain.Interfaces.RepositoryBase;
 using Microsoft.EntityFrameworkCore;
 
 namespace Api.Data.Repository
 {
+    /// <summary>
+    ///  Classe que implementa a interface IRepository< T>
+    /// </summary>
+    /// <typeparam name="T">Entidade obrigatoria</typeparam>
     public class BaseRepository<T> : IRepository<T> where T : BaseEntity
     {
         protected readonly MyContext _context;

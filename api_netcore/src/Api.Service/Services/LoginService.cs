@@ -1,13 +1,16 @@
 using System.Threading.Tasks;
 using Api.Domain.Dtos;
-using Api.Domain.Entities;
+using Api.Domain.Interfaces.Repository;
 using Api.Domain.Interfaces.Services.User;
-using Api.Domain.Repository;
+
 
 namespace Api.Service.Services
 {
+    /// <summary>Implementa a interface: ILoginService</summary>
     public class LoginService : ILoginService
     {
+
+        /// <summary> Propriedade que recebe o repositorio de login</summary>
         private IUserRepository _repository;
 
         public LoginService(IUserRepository repository )
@@ -15,6 +18,11 @@ namespace Api.Service.Services
             _repository = repository;
         }
 
+        /// <summary>
+        /// Método que busca o usuario pelo email
+        /// </summary>
+        /// <param name="user">Objeto com tratamento que serve para fazer uma autenticação!</param>
+        /// <returns>Um objeto autenticado com um token!</returns>
         public async Task<object> FindByLogin(LoginDto user)
         {
             

@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Api.Domain.Entities;
-using Api.Domain.Interfaces;
+using Api.Domain.Interfaces.RepositoryBase;
 using Api.Domain.Interfaces.Services.User;
 
 namespace Api.Service.Services
 {
+    /// <summary>Classe que implementa a interface IUserService</summary>
     public class UserService : IUserService
     {
 
@@ -19,7 +20,9 @@ namespace Api.Service.Services
 
         public async Task<bool> Delete(Guid id)
         {
+
             return await _repository.DeleteAsync(id);
+            
         }
 
         public async Task<UserEntity> Get(Guid id)

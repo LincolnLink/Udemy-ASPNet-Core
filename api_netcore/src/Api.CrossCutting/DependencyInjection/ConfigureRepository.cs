@@ -1,8 +1,8 @@
 using Api.Data.Context;
 using Api.Data.Implementations;
 using Api.Data.Repository;
-using Api.Domain.Interfaces;
-using Api.Domain.Repository;
+using Api.Domain.Interfaces.Repository;
+using Api.Domain.Interfaces.RepositoryBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 

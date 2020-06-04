@@ -1348,7 +1348,7 @@ Site: https://www.nuget.org/
 
     - Criando uma classe que implementa a interface que tem o método extendido que trata o login do Usuario!
 
-    Cria uma pasta com o nome "Implementations" no projeto Api.Data, na pasta cria uma classe com o nome "UserImplementation", que herda a classe "BaseRepository< UserEntity>" e implementa a interface "IUserRepository", para fazer o método extendido ter um corpo!
+    Cria uma pasta com o nome "Implementations" no projeto Api.Data, na pasta cria uma classe com o nome "UserImplementation", que herda a classe "BaseRepository< UserEntity>" e implementa a interface "IUserRepository", para fazer o "método extendido" ter um corpo!
 
     <blockquote>
 
@@ -1507,7 +1507,7 @@ Site: https://www.nuget.org/
 
     LoginDto avalia os dados antes mesmo de entrar na requisição !
 
-- Implementar Classe SigningConfigurations e TokenConfigurations
+- Api.Domain - Implementar Classe SigningConfigurations e TokenConfigurations
 
 
     Instala o pacote! da opção .NET CLI, dentro do projeto Api.Domain!
@@ -1538,7 +1538,7 @@ Site: https://www.nuget.org/
 
     </blockquote>
 
-    Cria uma segunda classe chamada "SigningConfigurations" na pasta "Security", ela recebe 2 propriedades!
+    Cria uma segunda classe chamada "SigningConfigurations" na pasta "Security", ela recebe 2 propriedades, essa classe configura a assinatura!
 
     Uma propriedade do tipo "SecurityKey" e outra do tipo "SigningCredentials"
 
@@ -1550,10 +1550,44 @@ Site: https://www.nuget.org/
 
     <blockquote>
 
+        public class SigningConfigurations
+        {
+            public SecurityKey Key { get; set; }
+
+            public SigningCredentials SigningCredentials { get; set; }
+            
+            public SigningConfigurations()
+            {
+                using (var provider = new RSACryptoServiceProvider(2048))
+                {
+                    Key = new RsaSecurityKey(provider.ExportParameters(true));
+                }
+
+                SigningCredentials = new SigningCredentials(Key, SecurityAlgorithms.RsaSha256Signature);
+            }
+
+        }
+
     </blockquote>
+
+- Api.Application - Adicionar Configuração do Token no AppSettings
+
+    No arquivo "appsettings.json" do proje Api.Application, é colocada uma configuração!
 
     <blockquote>
 
+        "TokenConfigurations": {
+        "Audience": "ExemploAudience",
+        "Issuer": "ExemploIssuer",
+        "Seconds": 120
+        },
+
+    </blockquote>
+
+- Api.Service - Gerar Token
+
+    <blockquote>
+    
     </blockquote>
 
 

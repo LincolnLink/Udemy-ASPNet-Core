@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Api.Domain.Security
 {
+    //Essa classe configura a assinatura
     public class SigningConfigurations
     {
         public SecurityKey Key { get; set; }

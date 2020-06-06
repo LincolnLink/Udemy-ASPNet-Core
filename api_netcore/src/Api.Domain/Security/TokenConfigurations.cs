@@ -1,6 +1,6 @@
 namespace Api.Domain.Security
 {
-    public class TokenConfiguration
+    public class TokenConfigurations
     {
         //Publico
         public string Audience { get; set; }

@@ -1,10 +1,12 @@
 ﻿using Api.CrossCutting.DependencyInjection;
+using Api.Domain.Security;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace Application
@@ -26,6 +28,20 @@ namespace Application
 
             /// Configuração da Injeção de dependencia do repositorio
             ConfigureRepository.ConfigureDependenciesRepository(services);
+
+            /// Configuração de Injeção de depenendecia sem Interface, apenas com classe
+            var signingConfigurations = new SigningConfigurations();
+            services.AddSingleton(signingConfigurations);
+
+            var tokenConfiguration = new TokenConfigurations();
+            new ConfigureFromConfigurationOptions<TokenConfigurations>(
+                Configuration.GetSection("TokenConfigurations"))
+                    .Configure(tokenConfiguration);
+
+            services.AddSingleton(tokenConfiguration);                  
+
+            
+
 
             //Configuração do Swagger!
             services.AddSwaggerGen(c =>

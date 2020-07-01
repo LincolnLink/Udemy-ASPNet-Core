@@ -1,5 +1,10 @@
-﻿using Api.CrossCutting.DependencyInjection;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Api.CrossCutting.DependencyInjection;
 using Api.Domain.Security;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -23,24 +28,48 @@ namespace Application
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            /// Configuração da Injeção de dependencia do serviço
+            // Configuração da Injeção de dependencia do serviço
             ConfigureService.ConfigureDependenciesService(services);
 
-            /// Configuração da Injeção de dependencia do repositorio
+            // Configuração da Injeção de dependencia do repositorio
             ConfigureRepository.ConfigureDependenciesRepository(services);
 
-            /// Configuração de Injeção de depenendecia sem Interface, apenas com classe
+            // Configuração de Injeção de depenendecia sem Interface, apenas com classe
             var signingConfigurations = new SigningConfigurations();
             services.AddSingleton(signingConfigurations);
 
-            var tokenConfiguration = new TokenConfigurations();
+            // Alem de configurar a injeção de dependencia, ele está alimentando 
+            // os propriedades com os valores que está no JSON!
+            var tokenConfigurations = new TokenConfigurations();
             new ConfigureFromConfigurationOptions<TokenConfigurations>(
                 Configuration.GetSection("TokenConfigurations"))
-                    .Configure(tokenConfiguration);
+                    .Configure(tokenConfigurations);
 
-            services.AddSingleton(tokenConfiguration);                  
+            services.AddSingleton(tokenConfigurations);                  
 
-            
+            // Configuração do token na aplicação!
+            services.AddAuthentication(authOptions =>
+            {
+                authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            }).AddJwtBearer(bearerOptions =>
+            {
+                var paramsValidation = bearerOptions.TokenValidationParameters;
+                paramsValidation.IssuerSigningKey = signingConfigurations.Key;
+                paramsValidation.ValidAudience = tokenConfigurations.Audience;
+                paramsValidation.ValidIssuer = tokenConfigurations.Issuer;
+                paramsValidation.ValidateIssuerSigningKey = true;
+                paramsValidation.ValidateLifetime = true;
+                paramsValidation.ClockSkew = TimeSpan.Zero; //Não entra token vencido
+            });
+
+            services.AddAuthorization(auth =>
+            {
+                auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
+                .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                .RequireAuthenticatedUser().Build());                
+            });
 
 
             //Configuração do Swagger!
@@ -57,6 +86,17 @@ namespace Application
                         Name = "Lincoln Ferreira Campos",
                         Url = "https://github.com/LincolnLink"
                     }
+                });
+
+                c.AddSecurityDefinition("Bearer", new ApiKeyScheme{
+                    In = "header", 
+                    Description = "Entre com o token JWT",
+                    Name = "Authorization",
+                    Type = "apiKey"
+                });
+
+                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>{
+                    {"Bearer", Enumerable.Empty<string>()}
                 });
             });
 

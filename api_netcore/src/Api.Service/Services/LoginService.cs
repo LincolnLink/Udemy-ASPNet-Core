@@ -82,14 +82,18 @@ namespace Api.Service.Services
                     string token = CreateToken(identity, createDate, expirationDate, handler);
 
                     // Retorna uma resposta com o token criado
-                    return SuccessObject(createDate, expirationDate, token, user);
+                    return SuccessObject(createDate, expirationDate, token, baseUser);
 
                 }
                
             }
             else
             {
-                return null;
+                return new {
+                        authenticated = false,
+                        message = "Falha ao autenticar"
+
+                };
             }            
         }
 
@@ -127,7 +131,7 @@ namespace Api.Service.Services
         /// <param name="token"></param>
         /// <param name="user"></param>
         /// <returns></returns>
-        private object SuccessObject(DateTime createDate, DateTime expirationDate, string token, LoginDto user)
+        private object SuccessObject(DateTime createDate, DateTime expirationDate, string token, UserEntity UserEntity)
         {
             return new
             {
@@ -135,7 +139,8 @@ namespace Api.Service.Services
                 created = createDate.ToString("yyyy-MM-dd HH:mm:ss"),
                 expiration = expirationDate.ToString("yyyy-MM-dd HH:mm:ss"),
                 acessToken = token,
-                userName = user.Email,
+                userName = UserEntity.Email,
+                name = UserEntity.Name,
                 message = "Usuario Logado com sucesso"
             };
 

@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Api.Domain.Entities;
 using Api.Domain.Interfaces.Services.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,6 +23,7 @@ namespace Api.Application.Controllers
 
         }
 
+        [Authorize("Bearer")]
         [HttpGet]
         [EnableCors("CorsPolicy")]
         public async Task<ActionResult> GetAll() //faz referencia do service
@@ -48,6 +50,7 @@ namespace Api.Application.Controllers
         }
 
         //localhost:5000/api/users/id
+        [Authorize("Bearer")]
         [HttpGet]
         [EnableCors("CorsPolicy")]
         [Route("{id}", Name = "GetWithId")]
@@ -71,6 +74,7 @@ namespace Api.Application.Controllers
 
         }
 
+        [Authorize("Bearer")]
         [HttpPost]
         [EnableCors("CorsPolicy")]
         public async Task<ActionResult> Post([FromBody] UserEntity user)
@@ -100,6 +104,7 @@ namespace Api.Application.Controllers
             }
         }
 
+        [Authorize("Bearer")]
         [HttpPut]
         [EnableCors("CorsPolicy")]
         public async Task<ActionResult> Put([FromBody] UserEntity user)
@@ -130,6 +135,7 @@ namespace Api.Application.Controllers
 
         }
 
+        [Authorize("Bearer")]
         [HttpDelete("{id}")] //("{id}")
         [EnableCors("CorsPolicy")]
         public async Task<ActionResult> Delete(Guid id)

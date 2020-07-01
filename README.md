@@ -1507,7 +1507,7 @@ Site: https://www.nuget.org/
 
     LoginDto avalia os dados antes mesmo de entrar na requisição !
 
-- Api.Domain - Implementar Classe SigningConfigurations e TokenConfigurations
+- Api.Domain - Crie e define duas Classes: SigningConfigurations e TokenConfigurations
 
 
     Instala o pacote! da opção .NET CLI, dentro do projeto Api.Domain!
@@ -1586,7 +1586,7 @@ Site: https://www.nuget.org/
 
 - Api.Service - Gerar Token
 
-    Cria uma instancia das duas classes que configura o token "SigningConfigurations" e "TokenConfiguration"
+    Cria uma instancia das duas classes que configura o token "SigningConfigurations" e "TokenConfiguration" com a injeção de dependencia!
     
     <blockquote>
 
@@ -1718,13 +1718,125 @@ Site: https://www.nuget.org/
             else
             {
 
-                return null;
+                return new {
+                        authenticated = false,
+                        message = "Falha ao autenticar"
+
+                    };
 
             }  
 
         }
 
     </blockquote>
+
+
+- Configurando a injeção de dependencia(sem usar interface) das classes: TokenConfigurations e SigningConfigurations (Startup.cs)
+
+
+
+    <blockquote>
+
+            public void ConfigureServices(IServiceCollection services)
+            {
+                /// Configuração de Injeção de depenendecia sem Interface, apenas com classe
+
+                var signingConfigurations = new SigningConfigurations();
+                services.AddSingleton(signingConfigurations);
+
+            }
+
+    </blockquote>
+
+    Alem de configurar a injeção de dependencia, está alimentando a classe com os valores do JSON "TokenConfigurations" que fica no arquivo "appsettings.json"!
+
+    <blockquote>
+            public void ConfigureServices(IServiceCollection services)
+            {
+                var tokenConfiguration = new TokenConfigurations();
+
+                new ConfigureFromConfigurationOptions<TokenConfigurations>(
+                    Configuration.GetSection("TokenConfigurations"))
+                    .Configure(tokenConfiguration);
+
+                services.AddSingleton(tokenConfiguration); 
+            }  
+
+    </blockquote>
+
+- Api.Application - Adicionar o Uso do Token (Startup.cs)
+
+    Configuração do token na aplicação!
+
+    <blockquote>
+            
+        services.AddAuthentication(authOptions =>
+        {
+            authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+        }).AddJwtBearer(bearerOptions =>
+        {
+            var paramsValidation = bearerOptions.TokenValidationParameters;
+            paramsValidation.IssuerSigningKey = signingConfigurations.Key;
+            paramsValidation.ValidAudience = tokenConfigurations.Audience;
+            paramsValidation.ValidIssuer = tokenConfigurations.Issuer;
+            paramsValidation.ValidateIssuerSigningKey = true;
+            paramsValidation.ValidateLifetime = true;
+            paramsValidation.ClockSkew = TimeSpan.Zero; //Não entra token vencido
+        });
+
+        services.AddAuthorization(auth =>
+        {
+            auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
+            .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+            .RequireAuthenticatedUser().Build());                
+        });
+
+    </blockquote>
+
+
+- Api.Application Adicionar Botão Authorize no Swagger
+
+    Vai ser criado no Swagger um botão aonde você bota o token gerado, com isso vai ter autorização para executar o CRUD!
+
+    <blockquote>
+
+        //Configuração do Swagger!
+        services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("v1",
+            new Info
+            {
+                Title = "API AspNetCore 2.2/3.0/3.1",
+                Version = "v1",
+                Description = "Exemplo de API REST criado com ASP.NET Core",
+                Contact = new Contact
+                {
+                    Name = "Lincoln Ferreira Campos",
+                    Url = "https://github.com/LincolnLink"
+                }
+            });
+
+            c.AddSecurityDefinition("Bearer", new ApiKeyScheme{
+                In = "header", 
+                Description = "Entre com o token JWT",
+                Name = "Authorization",
+                Type = "apiKey"
+            });
+
+            c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>{
+                {"Bearer", Enumerable.Empty<string>()}
+            });
+        });
+
+    </blockquote>
+
+
+
+
+
+
 
 
 

@@ -1832,6 +1832,32 @@ Site: https://www.nuget.org/
 
     </blockquote>
 
+# Migração do ASP.NET Core 2.2 para ASP.NET Core 3.0
+
+
+- Instalar o ASP.NET Core 3.0
+
+    https://dotnet.microsoft.com/download/dotnet-core/thank-you/sdk-3.1.301-windows-x64-installer
+
+    baixa e instala a ultima versão!
+
+- Reload C# for Visual Studio Code (powered by OmniSharp).
+
+    - Verificar se tem atualização pelo VS code:
+
+    Help -> Check for Updates
+    
+    - Atualiza o plugin do c#
+
+- Migração do ASP.NET Core 2.2 para ASP.NET Core 3.0 - Parte 1
+
+
+
+    
+
+
+
+
 
 
 
